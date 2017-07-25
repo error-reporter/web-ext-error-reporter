@@ -1,0 +1,29 @@
+{
+  "name": "web-ext-error-reporter",
+  "version": "0.0.1",
+  "description": "Error reporter for web extensions",
+  "scripts": {
+    "lint": "eslint ./src/**/*.js --ignore-pattern vendor",
+    "check": "flow status",
+    "start-flow": "flow server",
+    "forever-flow": "flow stop && forever start -c \"npm run start-flow\" ./",
+    "build:prod": "webpack --define process.env.NODE_ENV=\"'production'\" --env=prod",
+    "build:dev": "webpack --debug --env=dev",
+    "start": "flow status && npm run build:dev",
+    "prod": "flow status && npm run build:prod"
+  },
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "license": "GPLv3",
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.3.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-flowtype": "^2.35.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0"
+  },
+  "dependencies": {
+    "debug": "^2.6.8"
+  }
+}
