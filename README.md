@@ -1,2 +1,3 @@
-# web-ext-error-reporter
-Error Reporter for Web Extensions
+# Error Reporter for Web Extensions
+
+__Status__: not ready
