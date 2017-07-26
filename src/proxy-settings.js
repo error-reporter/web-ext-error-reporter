@@ -1,3 +1,13 @@
+import Utils from './utils';
+
+const getSettingsAsync = () =>
+  new Promise((resolve) =>
+    chrome.proxy.settings.get(
+      {},
+      Utils.getOrDie(resolve),
+    ),
+  );
+
 const ProxySettings = {
 
   /*
@@ -11,14 +21,16 @@ const ProxySettings = {
   * See: https://developer.chrome.com/extensions/proxy
   * */
 
-  areControllableFor(details) {
+  async areControllableAsync(details_) {
 
+    const details = details_ || await getSettingsAsync();
     return details.levelOfControl.endsWith('this_extension');
 
   },
 
-  areControlledFor(details) {
+  async areControlledAsync(details_) {
 
+    const details = details_ || await getSettingsAsync();
     return details.levelOfControl.startsWith('controlled_by_this');
 
   },
