@@ -3,13 +3,11 @@ import Versions from './versions';
 import ProxySettings from './proxy-settings';
 import CreateLocalStorage from './create-local-storage';
 
-const getUrl = (...args) => chrome.runtime.getURL(...args);
-
 /*
   Loads icon by url or generates icon from text when offline.
   Returns blob url.
 */
-const loadIconAsBlob = function loadIcon(iconUrl, cb = Utils.mandatory()) {
+const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.mandatory()) {
 
   const img = new Image();
 
@@ -19,35 +17,37 @@ const loadIconAsBlob = function loadIcon(iconUrl, cb = Utils.mandatory()) {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
 
-  const dumpCanvas = () =>
-    canvas.toBlob((blob) =>
-      cb(
-        URL.createObjectURL(blob),
-      )
-    );
+  return new Promise((resolve) => {
 
-  img.onload = () => {
+    const dumpCanvas = (cb = Utils.mandatory()) =>
+      canvas.toBlob((blob) =>
+        resolve(URL.createObjectURL(blob))
+      );
 
-    ctx.drawImage(img, 0, 0, size, size);
-    dumpCanvas();
+    img.onload = () => {
 
-  };
-  img.onerror = () => {
+      ctx.drawImage(img, 0, 0, size, size);
+      dumpCanvas();
 
-    // I did my best centering it.
-    ctx.fillStyle = 'red';
-    ctx.fillRect(0, 0, size, size);
-    ctx.font = '50px arial';
-    ctx.fillStyle = 'white';
+    };
+    img.onerror = () => {
 
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
+      // I did my best centering it.
+      ctx.fillStyle = 'red';
+      ctx.fillRect(0, 0, size, size);
+      ctx.font = '50px arial';
+      ctx.fillStyle = 'white';
 
-    ctx.fillText('error', 64, 64, 128);
-    dumpCanvas();
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
 
-  }
-  img.src = iconUrl;
+      ctx.fillText('error', 64, 64, 128);
+      dumpCanvas();
+
+    }
+    img.src = iconUrl;
+
+  });
 
 }
 
@@ -71,8 +71,8 @@ const extBuild = Versions.currentBuild;
     errorReportingUrl:
       'https://report.example.com?title={{message}}&body={{json}}',
     icons: {
-      'ext-err': 'https://example.com/icons/ext-err-128.png',
-      'pac-err': 'https://example.com/icons/pac-err-128.png',
+      'ext-error': 'https://example.com/icons/ext-err-128.png',
+      'pac-error': 'https://example.com/icons/pac-err-128.png',
       'mask': 'https://example.com/icons/mask-128.png',
     }
   }
@@ -82,7 +82,13 @@ const createErrorHandlers = ({
     // Icons:
     extErrorIconUrl = '',
     pacErrorIconUrl = '',
+    maskIconUrl = false,
   } = {}) => {
+
+  const errorTypeToIconUrl = {
+    'ext-error': extErrorIconUrl,
+    'pac-error': pacErrorIconUrl,
+  }
 
   const errorHandlers = {
 
@@ -141,7 +147,7 @@ const createErrorHandlers = ({
 
     typeToPlainError: {},
 
-    mayNotify(
+    async mayNotify(
       errorType,
       title,
       plainErrorOrMessage,
@@ -157,18 +163,29 @@ const createErrorHandlers = ({
       }
       this.typeToPlainError[errorType] = plainErrorOrMessage;
       const message = plainErrorOrMessage.message || plainErrorOrMessage.toString();
+
+      const iconUrl = await loadIconAsBlobUrlAsync(
+        errorTypeToIconUrl[errorType]
+      );
+      const opts = {
+        title,
+        message,
+        contextMessage: context,
+        requireInteraction: ifSticky,
+        type: 'basic',
+        iconUrl,
+        isClickable: true,
+      };
+      if (maskIconUrl) {
+        const url = await loadIconAsBlobUrlAsync(maskIconUrl);
+        Object.assign(opts, {
+          appIconMaskUrl: url,
+        });
+      }
+
       chrome.notifications.create(
         `${notyPrefix}${errorType}`,
-        {
-          title: title,
-          message: message,
-          contextMessage: context,
-          requireInteraction: ifSticky,
-          type: 'basic',
-          iconUrl: getUrl('./icons/' + icon),
-          appIconMaskUrl: getUrl('./icons/mask-128.png'),
-          isClickable: true,
-        }
+        opts
       );
 
     },
