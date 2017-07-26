@@ -1,23 +1,67 @@
-/* eslint-disable */
 import Utils from './utils';
 import Versions from './versions';
 import ProxySettings from './proxy-settings';
 import CreateLocalStorage from './create-local-storage';
 
-const timeouted = Utils.timeouted;
-const throwIfError = Utils.throwIfError;
-
 const getUrl = (...args) => chrome.runtime.getURL(...args);
+
+/*
+  Loads icon by url or generates icon from text when offline.
+  Returns blob url.
+*/
+const loadIconAsBlob = function loadIcon(iconUrl, cb = Utils.mandatory()) {
+
+  const img = new Image();
+
+  const size = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  const dumpCanvas = () =>
+    canvas.toBlob((blob) =>
+      cb(
+        URL.createObjectURL(blob),
+      )
+    );
+
+  img.onload = () => {
+
+    ctx.drawImage(img, 0, 0, size, size);
+    dumpCanvas();
+
+  };
+  img.onerror = () => {
+
+    // I did my best centering it.
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0, 0, size, size);
+    ctx.font = '50px arial';
+    ctx.fillStyle = 'white';
+
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+
+    ctx.fillText('error', 64, 64, 128);
+    dumpCanvas();
+
+  }
+  img.src = iconUrl;
+
+}
+
 
 const openAndFocus = function openAndFocus(url) {
 
   chrome.tabs.create(
     { url },
-    (tab) => chrome.windows.update(tab.windowId, { focused: true })
+    (tab) => chrome.windows.update(tab.windowId, { focused: true }),
   );
 
 };
 
+const notyPrefix = 'reporter-';
 const ifPrefix = 'if-on-';
 const extName = chrome.runtime.getManifest().name;
 const extBuild = Versions.currentBuild;
@@ -25,25 +69,38 @@ const extBuild = Versions.currentBuild;
 /*
   Configs: {
     errorReportingUrl:
-      type: string, template,
-      example: 'https://report.example.com?title={{message}}&body={{json}}'
+      'https://report.example.com?title={{message}}&body={{json}}',
+    icons: {
+      'ext-err': 'https://example.com/icons/ext-err-128.png',
+      'pac-err': 'https://example.com/icons/pac-err-128.png',
+      'mask': 'https://example.com/icons/mask-128.png',
+    }
   }
 */
-const createErrorHandlers = (Configs) => {
+const createErrorHandlers = ({
+    errorReportingUrl = '',
+    // Icons:
+    extErrorIconUrl = '',
+    pacErrorIconUrl = '',
+  } = {}) => {
 
   const errorHandlers = {
 
-    state: CreateLocalStorage('handlers-'),
+    state: CreateLocalStorage('error-handlers-'),
 
-    viewError(type = Utils.mandatory(), err) {
+    viewError(typeMaybe) {
 
-      const errors = err ? {[type]: err} : this.typeToError;
-      const versionedError = Object.assign({}, errors, {
+      const errors = typeMaybe
+        ? { [typeMaybe]: this.typeToPlainError[typeMaybe] }
+        : this.typeToPlainError;
+      const versionedErrors = Object.assign({}, errors, {
         version: Versions.current,
         extName,
       });
-      const json = JSON.stringify(versionedError, null, 2);
-      const msg = err && err.message || errors[type] && errors[type].message || 'I Found a Bug';
+      const json = JSON.stringify(versionedErrors, null, 2);
+      const msg =
+        errors[typeMaybe] && errors[typeMaybe].message
+        || 'I Found a Bug';
 
       openAndFocus(
         Configs.errorReportingUrl
@@ -58,12 +115,11 @@ const createErrorHandlers = (Configs) => {
       return new Map([
         ['pac-error', 'PAC script error'],
         ['ext-error', 'extension error'],
-        ['no-control', 'loss of proxy settings control'],
       ]);
 
     },
 
-    switch(onOffStr, eventName) {
+    switch(onOffStr = Utils.mandatory(), eventName) {
 
       if (!['on', 'off'].includes(onOffStr)) {
         throw new TypeError('First argument bust be "on" or "off".');
@@ -71,83 +127,38 @@ const createErrorHandlers = (Configs) => {
       for(
         const name of (eventName ? [eventName] : this.getErrorTypeToLabelMap().keys() )
       ) {
-        this.state( ifPrefix + name, onOffStr === 'on' ? 'on' : null );
+        this.state( ifPrefix + name, onOffStr === 'on' ? 'on' : 'off' );
       }
 
     },
 
     isOn(eventName) {
 
-      return this.state( ifPrefix + eventName );
+      // 'On' by default.
+      return this.state( ifPrefix + eventName ) !== 'off';
 
     },
 
-    ifControlled: null,
-    ifControllable: null,
-
-    isControllable(details) {
-
-      this.ifControllable = ProxySettings.areControllableFor(details);
-
-      if (this.ifControllable) {
-        this.ifControlled = ProxySettings.areControlledFor(details);
-      } else {
-        this.ifControlled = false;
-      }
-
-      if (this.ifControlled) {
-        chrome.browserAction.setIcon( {path: getUrl('./icons/default-64.png')} );
-      } else {
-        chrome.browserAction.setIcon({
-          path: getUrl('./icons/default-grayscale-128.png'),
-        });
-      }
-
-      return this.ifControllable;
-
-    },
-
-    isControlled(details) {
-
-      this.isControllable(details);
-      return this.ifControlled;
-
-    },
-
-    updateControlState(cb = throwIfError) {
-
-      chrome.proxy.settings.get(
-        {},
-        timeouted(
-          (details) => {
-
-            this.isControllable(details);
-            cb();
-
-          }
-        )
-      );
-
-    },
-
-    typeToError: {},
+    typeToPlainError: {},
 
     mayNotify(
-      errorType, title, errOrMessage,
+      errorType,
+      title,
+      plainErrorOrMessage,
       {
-        icon = 'default-64.png',
-        context = extName + ' ' + extBuild,
+        icon = Utils.mandatory,
+        context = `${extName} ${extBuild}`,
         ifSticky = true,
-      } = {}
+      }
     ) {
 
       if ( !this.isOn(errorType) ) {
         return;
       }
-      this.typeToError[errorType] = errOrMessage;
-      const message = errOrMessage.message || errOrMessage.toString();
+      this.typeToPlainError[errorType] = plainErrorOrMessage;
+      const message = plainErrorOrMessage.message || plainErrorOrMessage.toString();
       chrome.notifications.create(
-        errorType,
+        `${notyPrefix}${errorType}`,
         {
           title: title,
           message: message,
@@ -155,7 +166,7 @@ const createErrorHandlers = (Configs) => {
           requireInteraction: ifSticky,
           type: 'basic',
           iconUrl: getUrl('./icons/' + icon),
-          appIconMaskUrl: getUrl('./icons/default-mask-128.png'),
+          appIconMaskUrl: getUrl('./icons/mask-128.png'),
           isClickable: true,
         }
       );
@@ -166,25 +177,25 @@ const createErrorHandlers = (Configs) => {
 
       chrome.runtime.onMessage.addListener((message) => {
 
-        if (!message.error) {
+        if (message.to !== 'error-reporter') {
           return;
         }
-        const err = JSON.parse(message.error);
+        const err = message.errorData;
 
         this.mayNotify('ext-error', 'Extension error', err,
           {icon: 'ext-error-128.png'});
 
       });
 
-      chrome.notifications.onClicked.addListener( timeouted( (notId) => {
+      chrome.notifications.onClicked.addListener( Utils.timeouted( (notyId) => {
 
-        chrome.notifications.clear(notId);
-        if(notId === 'no-control') {
-          return openAndFocus(
-            ProxySettings.messages.searchSettingsForAsUrl('proxy')
-          );
+        if (!notyId.startsWith(notyPrefix)) {
+          return;
         }
-        errorHandlers.viewError(notId);
+
+        chrome.notifications.clear(notyId);
+        const errorType = notyId.substr(notyPrefix);
+        errorHandlers.viewError(errorType);
 
       }));
 
@@ -192,11 +203,10 @@ const createErrorHandlers = (Configs) => {
         return;
       }
 
-      errorHandlers.updateControlState();
+      chrome.proxy.onProxyError.addListener( Utils.timeouted( async(details) => {
 
-      chrome.proxy.onProxyError.addListener( timeouted( (details) => {
-
-        if (!errorHandlers.ifControlled) {
+        const ifControlled = await ProxySettings.areControlledAsync();
+        if (!ifControlled) {
           return;
         }
         /*
@@ -217,23 +227,6 @@ const createErrorHandlers = (Configs) => {
           details.error + '\n' + details.details,
           {icon: 'pac-error-128.png'}
         );
-
-      }));
-
-      chrome.proxy.settings.onChange.addListener( timeouted( (details) => {
-
-        const noCon = 'no-control';
-        const ifWasControllable = errorHandlers.ifControllable;
-        if ( !errorHandlers.isControllable(details) && ifWasControllable ) {
-          errorHandlers.mayNotify(
-            noCon,
-            chrome.i18n.getMessage('noControl'),
-            chrome.i18n.getMessage('which'),
-            {icon: 'no-control-128.png', ifSticky: false}
-          );
-        } else {
-          chrome.notifications.clear( noCon );
-        }
 
       }));
 

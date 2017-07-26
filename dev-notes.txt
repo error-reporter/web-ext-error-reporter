@@ -1,0 +1,15 @@
+This document explains reasons behind design decisions.
+
+1. This is a error reporting library.
+2. It provides:
+   A. Means of catching errors.
+   B. Means of reporting errors.
+3. Type of errors caught:
+   A. Errors raised to the top level.
+   B. Unhandled promise rejections raised to the top level.
+   C. Proxy script errors (PAC-scripts).
+4. PAC-script errors are not relevant if extension doesn't
+   control proxy settings (if PAC-script doesn't belong to
+   extension, why to handle its errors?).
+5. We don't need to know proxy settings posession at any
+   moment, only at the moment of exception handling.

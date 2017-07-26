@@ -1,6 +1,6 @@
 import Debug from 'debug';
 
-const debug = Debug('web-ext:utils');
+const debug = Debug(`error-tools:${__filename}`);
 
 const Utils = {
 
