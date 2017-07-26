@@ -19,9 +19,9 @@ const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.m
 
   return new Promise((resolve) => {
 
-    const dumpCanvas = (cb = Utils.mandatory()) =>
+    const dumpCanvas = () =>
       canvas.toBlob((blob) =>
-        resolve(URL.createObjectURL(blob))
+        resolve(URL.createObjectURL(blob)),
       );
 
     img.onload = () => {
@@ -44,12 +44,12 @@ const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.m
       ctx.fillText('error', 64, 64, 128);
       dumpCanvas();
 
-    }
+    };
     img.src = iconUrl;
 
   });
 
-}
+};
 
 
 const openAndFocus = function openAndFocus(url) {
@@ -77,7 +77,8 @@ const extBuild = Versions.currentBuild;
     }
   }
 */
-const createErrorHandlers = ({
+const createErrorHandlers = (
+  {
     errorReportingUrl = 'https://rebrand.ly/view-error/title={{title}}&json={{json}}',
     // Icons:
     extErrorIconUrl = 'https://rebrand.ly/ext-error',
@@ -88,7 +89,7 @@ const createErrorHandlers = ({
   const errorTypeToIconUrl = {
     'ext-error': extErrorIconUrl,
     'pac-error': pacErrorIconUrl,
-  }
+  };
 
   const errorHandlers = {
 
@@ -105,11 +106,11 @@ const createErrorHandlers = ({
       });
       const json = JSON.stringify(versionedErrors, null, 2);
       const msg =
-        errors[typeMaybe] && errors[typeMaybe].message
+        (errors[typeMaybe] && errors[typeMaybe].message)
         || 'I Found a Bug';
 
       openAndFocus(
-        Configs.errorReportingUrl
+        errorReportingUrl
           .replace('{{message}}', encodeURIComponent(msg))
           .replace('{{json}}', encodeURIComponent(json)),
       );
@@ -130,10 +131,13 @@ const createErrorHandlers = ({
       if (!['on', 'off'].includes(onOffStr)) {
         throw new TypeError('First argument bust be "on" or "off".');
       }
-      for(
-        const name of (eventName ? [eventName] : this.getErrorTypeToLabelMap().keys() )
+      for (
+        const name of (eventName
+          ? [eventName]
+          : this.getErrorTypeToLabelMap().keys()
+        )
       ) {
-        this.state( ifPrefix + name, onOffStr === 'on' ? 'on' : 'off' );
+        this.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off');
       }
 
     },
@@ -141,7 +145,7 @@ const createErrorHandlers = ({
     isOn(eventName) {
 
       // 'On' by default.
-      return this.state( ifPrefix + eventName ) !== 'off';
+      return this.state(ifPrefix + eventName) !== 'off';
 
     },
 
@@ -152,20 +156,19 @@ const createErrorHandlers = ({
       title,
       plainErrorOrMessage,
       {
-        icon = Utils.mandatory,
         context = `${extName} ${extBuild}`,
         ifSticky = true,
-      }
+      },
     ) {
 
-      if ( !this.isOn(errorType) ) {
+      if (!this.isOn(errorType)) {
         return;
       }
       this.typeToPlainError[errorType] = plainErrorOrMessage;
       const message = plainErrorOrMessage.message || plainErrorOrMessage.toString();
 
       const iconUrl = await loadIconAsBlobUrlAsync(
-        errorTypeToIconUrl[errorType]
+        errorTypeToIconUrl[errorType],
       );
       const opts = {
         title,
@@ -185,7 +188,7 @@ const createErrorHandlers = ({
 
       chrome.notifications.create(
         `${notyPrefix}${errorType}`,
-        opts
+        opts,
       );
 
     },
@@ -199,12 +202,11 @@ const createErrorHandlers = ({
         }
         const err = message.errorData;
 
-        this.mayNotify('ext-error', 'Extension error', err,
-          {icon: 'ext-error-128.png'});
+        this.mayNotify('ext-error', 'Extension error', err);
 
       });
 
-      chrome.notifications.onClicked.addListener( Utils.timeouted( (notyId) => {
+      chrome.notifications.onClicked.addListener(Utils.timeouted((notyId) => {
 
         if (!notyId.startsWith(notyPrefix)) {
           return;
@@ -220,7 +222,7 @@ const createErrorHandlers = ({
         return;
       }
 
-      chrome.proxy.onProxyError.addListener( Utils.timeouted( async(details) => {
+      chrome.proxy.onProxyError.addListener(Utils.timeouted(async (details) => {
 
         const ifControlled = await ProxySettings.areControlledAsync();
         if (!ifControlled) {
@@ -238,11 +240,9 @@ const createErrorHandlers = ({
           // Ignore it.
           return;
         }
-        console.warn('PAC ERROR', details);
         // TOOD: add "view pac script at this line" button.
         errorHandlers.mayNotify('pac-error', 'PAC Error!',
-          details.error + '\n' + details.details,
-          {icon: 'pac-error-128.png'}
+          `${details.error}\n${details.details}`,
         );
 
       }));

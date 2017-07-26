@@ -4,8 +4,6 @@ import Utils from './utils';
 
 const debug = Debug(`error-tools:${__filename}`);
 
-alert(__filename); // GOO
-
 const errorEventToPlainObject = (errEv) => {
 
   const plainObj = [
