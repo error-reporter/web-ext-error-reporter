@@ -78,10 +78,10 @@ const extBuild = Versions.currentBuild;
   }
 */
 const createErrorHandlers = ({
-    errorReportingUrl = '',
+    errorReportingUrl = 'https://rebrand.ly/view-error/title={{title}}&json={{json}}',
     // Icons:
-    extErrorIconUrl = '',
-    pacErrorIconUrl = '',
+    extErrorIconUrl = 'https://rebrand.ly/ext-error',
+    pacErrorIconUrl = 'https://rebrand.ly/pac-error',
     maskIconUrl = false,
   } = {}) => {
 
