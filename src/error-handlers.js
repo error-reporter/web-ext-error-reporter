@@ -131,14 +131,12 @@ const createErrorHandlers = (
       if (!['on', 'off'].includes(onOffStr)) {
         throw new TypeError('First argument bust be "on" or "off".');
       }
-      for (
-        const name of (eventName
-          ? [eventName]
-          : this.getErrorTypeToLabelMap().keys()
-        )
-      ) {
-        this.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off');
-      }
+      const eventNames = eventName
+        ? [eventName]
+        : this.getErrorTypeToLabelMap().keys();
+      eventNames.forEach((name) =>
+        this.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off'),
+      );
 
     },
 
