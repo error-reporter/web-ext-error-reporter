@@ -1,9 +1,9 @@
 import Utils from './utils';
 import ErrorCatchers from './error-catchers';
-import CreateErrorNotifiers from './create-error-notifiers';
+import GetNotifiersSingleton from './get-notifiers-singleton';
 
 export {
   Utils,
   ErrorCatchers,
-  CreateErrorNotifiers,
+  GetNotifiersSingleton,
 };
