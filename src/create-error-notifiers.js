@@ -13,6 +13,7 @@ const debug = Debug('weer:notifier');
 const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.mandatory()) {
 
   const img = new Image();
+  img.crossOrigin = 'anonymous';
 
   const size = 128;
   const canvas = document.createElement('canvas');
@@ -83,7 +84,7 @@ const extBuild = Versions.currentBuild;
 */
 const CreateErrorNotifiers = (
   {
-    errorReportingUrl = 'https://rebrand.ly/view-error/title={{title}}&json={{json}}',
+    errorReportingUrl = 'https://rebrand.ly/view-error/?title={{message}}&json={{json}}',
     // Icons:
     extErrorIconUrl = 'https://rebrand.ly/ext-error',
     pacErrorIconUrl = 'https://rebrand.ly/pac-error',
@@ -160,7 +161,7 @@ const CreateErrorNotifiers = (
       {
         context = `${extName} ${extBuild}`,
         ifSticky = true,
-      },
+      } = {},
     ) {
 
       if (!this.isOn(errorType)) {
@@ -176,7 +177,6 @@ const CreateErrorNotifiers = (
         title,
         message,
         contextMessage: context,
-        requireInteraction: ifSticky,
         type: 'basic',
         iconUrl,
         isClickable: true,
@@ -185,6 +185,11 @@ const CreateErrorNotifiers = (
         const url = await loadIconAsBlobUrlAsync(maskIconUrl);
         Object.assign(opts, {
           appIconMaskUrl: url,
+        });
+      }
+      if (!/Firefox/.test(navigator.userAgent)) {
+        Object.assign(opts, {
+          requireInteraction: ifSticky,
         });
       }
 
@@ -197,15 +202,25 @@ const CreateErrorNotifiers = (
 
     install() {
 
+      /*
+        You can't send message from bg to bg, call this function
+        instead when caught error in BG window.
+        See: https://stackoverflow.com/questions/17899769
+      */
+      const notifyFromBg = (message) => {
+
+        const err = message.errorData;
+        this.mayNotify('ext-error', 'Extension error', err);
+
+      };
+
       chrome.runtime.onMessage.addListener((message) => {
 
         debug('Received:', message);
         if (message.to !== 'error-reporter') {
           return;
         }
-        const err = message.errorData;
-
-        this.mayNotify('ext-error', 'Extension error', err);
+        notifyFromBg(message);
 
       });
 
@@ -221,34 +236,34 @@ const CreateErrorNotifiers = (
 
       }));
 
-      if (!chrome.proxy) {
-        return;
+      if (chrome.proxy) {
+        chrome.proxy.onProxyError.addListener(Utils.timeouted(async (details) => {
+
+          const ifControlled = await ProxySettings.areControlledAsync();
+          if (!ifControlled) {
+            return;
+          }
+          /*
+            Example:
+              details: "line: 7: Uncaught Error: This is error, man.",
+              error: "net::ERR_PAC_SCRIPT_FAILED",
+              fatal: false,
+          */
+          const ifConFail = details.error === 'net::ERR_PROXY_CONNECTION_FAILED';
+          if (ifConFail) {
+            // Happens if you return neither prixies nor "DIRECT".
+            // Ignore it.
+            return;
+          }
+          // TOOD: add "view pac script at this line" button.
+          errorNotifiers.mayNotify('pac-error', 'PAC Error!',
+            `${details.error}\n${details.details}`,
+          );
+
+        }));
       }
 
-      chrome.proxy.onProxyError.addListener(Utils.timeouted(async (details) => {
-
-        const ifControlled = await ProxySettings.areControlledAsync();
-        if (!ifControlled) {
-          return;
-        }
-        /*
-          Example:
-            details: "line: 7: Uncaught Error: This is error, man.",
-            error: "net::ERR_PAC_SCRIPT_FAILED",
-            fatal: false,
-        */
-        const ifConFail = details.error === 'net::ERR_PROXY_CONNECTION_FAILED';
-        if (ifConFail) {
-          // Happens if you return neither prixies nor "DIRECT".
-          // Ignore it.
-          return;
-        }
-        // TOOD: add "view pac script at this line" button.
-        errorNotifiers.mayNotify('pac-error', 'PAC Error!',
-          `${details.error}\n${details.details}`,
-        );
-
-      }));
+      return notifyFromBg;
 
     },
   };
