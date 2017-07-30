@@ -67,6 +67,14 @@ const Utils = {
 
   },
 
+  assert(value = Utils.mandatory()) {
+
+    if(!value) {
+      throw new Error(`Assertion failed, value: ${value}`);
+    }
+
+  },
+
 };
 
 export default Utils;

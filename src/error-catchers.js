@@ -29,17 +29,32 @@ const errorEventToPlainObject = (errEv) => {
 
 };
 
+const bgName = 'BG'
+
 export default {
 
-  installListenersOn(
-    win,
-    nameForDebug = Utils.mandatory(),
-    notifyFromBg,
-    cb,
-  ) {
+  installListenersOn({
+    hostWindow = window,
+    nameForDebug = bgName,
+    sendMessageToBg,
+  } = {}, cb) {
+
+    const ifInBg = hostWindow === window;
+    const bgIsBg = `Background window can't have name other than "${bgName}". ` +
+      `Default value is "${bgName}".`;
+    if (ifInBg) {
+      Utils.assert(
+        typeof sendMessageToBg === 'function',
+        'Messaging from BG window to itself is not allowed,' +
+        ' provide message handler for such cases.',
+      );
+      Utils.assert(nameForDebug === 'BG', ``);
+    } else {
+      Utils.assert(nameForDebug !== 'BG', bgIsBg);
+    }
 
     const ifUseCapture = true;
-    win.addEventListener('error', (errEvent) => {
+    hostWindow.addEventListener('error', (errEvent) => {
 
       debug(nameForDebug, errEvent);
       const plainObj = errorEventToPlainObject(errEvent);
@@ -49,10 +64,11 @@ export default {
         errorData: plainObj,
       };
 
-      if (win === window) {
-        notifyFromBg(msg);
+      if (ifInBg) {
+        // Self messaging is not allowed.
+        sendMessageToBg(msg);
       } else {
-        win.chrome.runtime.sendMessage(msg);
+        hostWindow.chrome.runtime.sendMessage(msg);
       }
 
       // errEvent.preventDefault();
@@ -60,7 +76,7 @@ export default {
 
     }, ifUseCapture);
 
-    win.addEventListener('unhandledrejection', (event) => {
+    hostWindow.addEventListener('unhandledrejection', (event) => {
 
       event.preventDefault();
       throw event.reason;

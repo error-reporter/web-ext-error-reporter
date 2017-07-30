@@ -203,11 +203,11 @@ const CreateErrorNotifiers = (
     install() {
 
       /*
-        You can't send message from bg to bg, call this function
+        You can't send message from bg to itself, call this function
         instead when caught error in BG window.
         See: https://stackoverflow.com/questions/17899769
       */
-      const notifyFromBg = (message) => {
+      const sendMessageToBg = (message) => {
 
         const err = message.errorData;
         this.mayNotify('ext-error', 'Extension error', err);
@@ -220,7 +220,7 @@ const CreateErrorNotifiers = (
         if (message.to !== 'error-reporter') {
           return;
         }
-        notifyFromBg(message);
+        sendMessageToBg(message);
 
       });
 
@@ -263,7 +263,7 @@ const CreateErrorNotifiers = (
         }));
       }
 
-      return notifyFromBg;
+      return sendMessageToBg;
 
     },
   };
