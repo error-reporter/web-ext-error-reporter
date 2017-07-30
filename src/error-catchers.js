@@ -34,6 +34,7 @@ export default {
   installListenersOn(
     win,
     nameForDebug = Utils.mandatory(),
+    notifyFromBg,
     cb,
   ) {
 
@@ -42,7 +43,21 @@ export default {
 
       debug(nameForDebug, errEvent);
       const plainObj = errorEventToPlainObject(errEvent);
-      chrome.runtime.sendMessage({ to: 'error-reporter', errorData: plainObj });
+
+      const msg = {
+        to: 'error-reporter',
+        errorData: plainObj,
+      };
+
+      // console.log(errEvent);
+      // console.log('WW?', window === win);
+      // console.log('WW2?', window === errEvent.target);
+
+      if (win === window) {
+        notifyFromBg(msg);
+      } else {
+        chrome.runtime.sendMessage(msg);
+      }
 
       // errEvent.preventDefault();
       // return false;
