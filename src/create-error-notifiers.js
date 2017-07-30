@@ -1,7 +1,10 @@
 import Utils from './utils';
-import Versions from './versions';
-import ProxySettings from './proxy-settings';
-import CreateLocalStorage from './create-local-storage';
+import Versions from './private/versions';
+import ProxySettings from './private/proxy-settings';
+import CreateLocalStorage from './private/create-local-storage';
+import Debug from './private/debug';
+
+const debug = Debug('weer:notifier');
 
 /*
   Loads icon by url or generates icon from text when offline.
@@ -41,7 +44,8 @@ const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.m
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'center';
 
-      ctx.fillText('error', 64, 64, 128);
+      const half = size / 2;
+      ctx.fillText('error', half, half, size);
       dumpCanvas();
 
     };
@@ -77,7 +81,7 @@ const extBuild = Versions.currentBuild;
     }
   }
 */
-const createErrorHandlers = (
+const CreateErrorNotifiers = (
   {
     errorReportingUrl = 'https://rebrand.ly/view-error/title={{title}}&json={{json}}',
     // Icons:
@@ -91,7 +95,7 @@ const createErrorHandlers = (
     'pac-error': pacErrorIconUrl,
   };
 
-  const errorHandlers = {
+  const errorNotifiers = {
 
     state: CreateLocalStorage('error-handlers-'),
 
@@ -195,6 +199,7 @@ const createErrorHandlers = (
 
       chrome.runtime.onMessage.addListener((message) => {
 
+        debug('Received:', message);
         if (message.to !== 'error-reporter') {
           return;
         }
@@ -212,7 +217,7 @@ const createErrorHandlers = (
 
         chrome.notifications.clear(notyId);
         const errorType = notyId.substr(notyPrefix);
-        errorHandlers.viewError(errorType);
+        errorNotifiers.viewError(errorType);
 
       }));
 
@@ -239,7 +244,7 @@ const createErrorHandlers = (
           return;
         }
         // TOOD: add "view pac script at this line" button.
-        errorHandlers.mayNotify('pac-error', 'PAC Error!',
+        errorNotifiers.mayNotify('pac-error', 'PAC Error!',
           `${details.error}\n${details.details}`,
         );
 
@@ -247,8 +252,8 @@ const createErrorHandlers = (
 
     },
   };
-  return errorHandlers;
+  return errorNotifiers;
 
 };
 
-export default createErrorHandlers;
+export default CreateErrorNotifiers;

@@ -5,6 +5,11 @@
 1.  https://developer.chrome.com/extensions/manifest/version
 2.  https://www.chromium.org/developers/version-numbers
 
+# Purpose
+
+1. Compare versions.
+2. Shorthands for getting info about version (full version, build).
+
 */
 const versionLimit = 2 ** 16;
 

@@ -1,8 +1,8 @@
-import Debug from 'debug';
 import Errio from 'errio';
+import Debug from './private/debug';
 import Utils from './utils';
 
-const debug = Debug(`error-tools:${__filename}`);
+const debug = Debug('weer:catcher');
 
 const errorEventToPlainObject = (errEv) => {
 
@@ -31,25 +31,26 @@ const errorEventToPlainObject = (errEv) => {
 
 export default {
 
-  installListenersOn(win = Utils.mandatory(), nameForDebug = Utils.mandatory(), cb) {
+  installListenersOn(
+    win,
+    nameForDebug = Utils.mandatory(),
+    cb,
+  ) {
 
     const ifUseCapture = true;
     win.addEventListener('error', (errEvent) => {
 
-      debug(`${nameForDebug}:GLOBAL ERROR`, errEvent);
+      debug(nameForDebug, errEvent);
       const plainObj = errorEventToPlainObject(errEvent);
       chrome.runtime.sendMessage({ to: 'error-reporter', errorData: plainObj });
 
-      errEvent.preventDefault();
-      errEvent.stopPropagation();
-
-      return false;
+      // errEvent.preventDefault();
+      // return false;
 
     }, ifUseCapture);
 
     win.addEventListener('unhandledrejection', (event) => {
 
-      debug(`${nameForDebug}: Unhandled rejection. Throwing error.`);
       event.preventDefault();
       throw event.reason;
 

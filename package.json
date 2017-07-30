@@ -1,14 +1,15 @@
 {
-  "name": "web-ext-error-reporter",
-  "version": "0.0.1",
+  "name": "weer-bundler",
+  "version": "0.0.0",
   "description": "Error reporter for web extensions",
+  "main": "./dist/cjs/",
+  "module": "./dist/esm/",
   "scripts": {
     "lint": "eslint ./src/**/*.js --ignore-pattern vendor",
+    "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/.",
     "check": "flow status",
     "start-flow": "flow server",
     "forever-flow": "flow stop && forever start -c \"npm run start-flow\" ./",
-    "build:prod": "webpack --define process.env.NODE_ENV=\"'production'\" --env=prod",
-    "build:dev": "webpack --debug --env=dev",
     "start": "flow status && npm run build:dev",
     "prod": "flow status && npm run build:prod"
   },
@@ -18,13 +19,14 @@
     "babel-eslint": "^7.2.3",
     "eslint": "^4.3.0",
     "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-flowtype": "^2.35.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0"
+    "rollup": "^0.45.2",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "shx": "^0.2.2"
   },
   "dependencies": {
-    "debug": "^2.6.8",
     "errio": "^1.2.2"
   }
 }
