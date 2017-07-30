@@ -49,14 +49,10 @@ export default {
         errorData: plainObj,
       };
 
-      // console.log(errEvent);
-      // console.log('WW?', window === win);
-      // console.log('WW2?', window === errEvent.target);
-
       if (win === window) {
         notifyFromBg(msg);
       } else {
-        chrome.runtime.sendMessage(msg);
+        win.chrome.runtime.sendMessage(msg);
       }
 
       // errEvent.preventDefault();
