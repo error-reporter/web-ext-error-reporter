@@ -56,7 +56,6 @@ const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.m
 
 };
 
-
 const openAndFocus = function openAndFocus(url) {
 
   chrome.tabs.create(
@@ -118,29 +117,6 @@ const CreateErrorNotifiers = (
         errorReportingUrl
           .replace('{{message}}', encodeURIComponent(msg))
           .replace('{{json}}', encodeURIComponent(json)),
-      );
-
-    },
-
-    getErrorTypeToLabelMap() {
-
-      return new Map([
-        ['pac-error', 'PAC script error'],
-        ['ext-error', 'extension error'],
-      ]);
-
-    },
-
-    switch(onOffStr = Utils.mandatory(), eventName) {
-
-      if (!['on', 'off'].includes(onOffStr)) {
-        throw new TypeError('First argument bust be "on" or "off".');
-      }
-      const eventNames = eventName
-        ? [eventName]
-        : this.getErrorTypeToLabelMap().keys();
-      eventNames.forEach((name) =>
-        this.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off'),
       );
 
     },
@@ -207,7 +183,7 @@ const CreateErrorNotifiers = (
         instead when caught error in BG window.
         See: https://stackoverflow.com/questions/17899769
       */
-      const sendMessageToBg = (message) => {
+      const handleErrorMessage = (message) => {
 
         const err = message.errorData;
         this.mayNotify('ext-error', 'Extension error', err);
@@ -220,7 +196,7 @@ const CreateErrorNotifiers = (
         if (message.to !== 'error-reporter') {
           return;
         }
-        sendMessageToBg(message);
+        handleErrorMessage(message);
 
       });
 
@@ -263,7 +239,7 @@ const CreateErrorNotifiers = (
         }));
       }
 
-      return sendMessageToBg;
+      return handleErrorMessage;
 
     },
   };
@@ -271,4 +247,51 @@ const CreateErrorNotifiers = (
 
 };
 
-export default CreateErrorNotifiers;
+let singleton = false;
+
+export default function getNotifiersSingleton(configs) {
+
+  if (singleton) {
+    return singleton;
+  }
+  const notifiers = CreateErrorNotifiers(configs);
+  const handleErrorMessage = notifiers.install();
+
+  singleton = {
+    // Public API.
+
+    handleErrorMessage,
+
+    getErrorTypeToLabelMap() {
+
+      return new Map([
+        ['pac-error', 'PAC script error'],
+        ['ext-error', 'extension error'],
+      ]);
+
+    },
+
+    switch(onOffStr = Utils.mandatory(), eventName) {
+
+      Utils.assert(
+        ['on', 'off'].includes(onOffStr),
+        'First argument bust be "on" or "off".',
+      );
+      const eventNames = eventName
+        ? [eventName]
+        : this.getErrorTypeToLabelMap().keys();
+      eventNames.forEach((name) =>
+        notifiers.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off'),
+      );
+
+    },
+
+    isOn(eventName) {
+
+      return notifiers.isOn(eventName);
+
+    }
+  };
+  return singleton;
+
+};

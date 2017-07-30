@@ -39,7 +39,7 @@ const external = [
 const externalAll = [
   ...external,
   ...absAndRel('error-catchers'),
-  ...absAndRel('create-error-notifiers')
+  ...absAndRel('get-notifiers-singleton')
 ];
 
 const utilsFullPath =  Path.resolve(inSrc('utils'));
@@ -77,12 +77,12 @@ export default [
   {
     plugins,
     external,
-    entry: inSrc('create-error-notifiers.js'),
+    entry: inSrc('get-notifiers-singleton.js'),
     targets: [
-      { dest: './dist/cjs/create-error-notifiers.js', format: 'cjs' },
-      { dest: './dist/esm/create-error-notifiers.js', format: 'es' },
-      { dest: './dist/umd/create-error-notifiers.js', format: 'umd',
-        moduleName: 'Weer.CreateErrorNotifiers',
+      { dest: './dist/cjs/get-notifiers-singleton.js', format: 'cjs' },
+      { dest: './dist/esm/get-notifiers-singleton.js', format: 'es' },
+      { dest: './dist/umd/get-notifiers-singleton.js', format: 'umd',
+        moduleName: 'Weer.GetNotifiersSingleton',
         globals
       }
     ]

@@ -36,7 +36,7 @@ export default {
   installListenersOn({
     hostWindow = window,
     nameForDebug = bgName,
-    sendMessageToBg,
+    handleErrorMessage,
   } = {}, cb) {
 
     const ifInBg = hostWindow === window;
@@ -44,7 +44,7 @@ export default {
       `Default value is "${bgName}".`;
     if (ifInBg) {
       Utils.assert(
-        typeof sendMessageToBg === 'function',
+        typeof handleErrorMessage === 'function',
         'Messaging from BG window to itself is not allowed,' +
         ' provide message handler for such cases.',
       );
@@ -65,8 +65,8 @@ export default {
       };
 
       if (ifInBg) {
-        // Self messaging is not allowed.
-        sendMessageToBg(msg);
+        // Because self messaging is not allowed.
+        handleErrorMessage(msg);
       } else {
         hostWindow.chrome.runtime.sendMessage(msg);
       }
