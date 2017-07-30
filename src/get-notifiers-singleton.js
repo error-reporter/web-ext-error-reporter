@@ -98,12 +98,15 @@ const CreateErrorNotifiers = (
   const errorNotifiers = {
 
     state: CreateLocalStorage('error-handlers-'),
+    typeToPlainError: {},
 
     viewError(typeMaybe) {
 
       const errors = typeMaybe
         ? { [typeMaybe]: this.typeToPlainError[typeMaybe] }
         : this.typeToPlainError;
+      console.log('TYPE', typeMaybe);
+      console.log('ERRS', errors);
       const versionedErrors = Object.assign({}, errors, {
         version: Versions.current,
         extName,
@@ -127,8 +130,6 @@ const CreateErrorNotifiers = (
       return this.state(ifPrefix + eventName) !== 'off';
 
     },
-
-    typeToPlainError: {},
 
     async mayNotify(
       errorType,
@@ -207,7 +208,7 @@ const CreateErrorNotifiers = (
         }
 
         chrome.notifications.clear(notyId);
-        const errorType = notyId.substr(notyPrefix);
+        const errorType = notyId.substr(notyPrefix.length);
         errorNotifiers.viewError(errorType);
 
       }));
