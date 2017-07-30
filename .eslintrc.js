@@ -10,12 +10,12 @@ module.exports = {
     chrome: true,
   },
   extends: [
-    'plugin:flowtype/recommended',
+//    'plugin:flowtype/recommended',
     'eslint:recommended',
     'airbnb',
   ],
   plugins: [
-    'flowtype',
+//    'flowtype',
   ],
   rules: {
     'arrow-parens': ['error', 'always'], // (arg) => thingy

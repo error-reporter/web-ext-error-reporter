@@ -1,7 +1,12 @@
-import Debug from 'debug';
+/*
 
-const debug = Debug(`error-tools:${__filename}`);
+# Purpose
 
+1. `timeouted` wrapper that makes error catching possible.
+2. Convert error-first callbacks for use by chrome API: `chromified`.
+3. Add utils for safer coding: `mandatory`, `throwIfError`.
+
+*/
 const Utils = {
 
   mandatory() {
@@ -26,7 +31,6 @@ const Utils = {
     if (!err) {
       return;
     }
-    debug('API returned error:', err);
     return new Error(err.message); // Add stack.
 
   },
@@ -60,38 +64,6 @@ const Utils = {
       cb(...args);
 
     });
-
-  },
-
-  getProp(obj, path = Utils.mandatory()) {
-
-    const props = path.split('.');
-    if (!props.length) {
-      throw new TypeError('Property must be supplied.');
-    }
-    const lastProp = props.pop();
-    const lastObj = props.reduce(
-      (acc, prop) => {
-
-        if (acc && prop in acc) {
-          return acc[prop];
-        }
-        return undefined;
-
-      },
-      obj,
-    );
-
-    return lastObj ? lastObj[lastProp] : undefined;
-
-  },
-
-  assert(value) {
-
-    if (!value) {
-      debug('Assert failed:', value);
-      throw new Error(`Assert failed for: ${value}`);
-    }
 
   },
 
