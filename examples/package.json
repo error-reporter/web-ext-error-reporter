@@ -1,0 +1,27 @@
+{
+  "name": "weer-examples",
+  "version": "0.0.0",
+  "description": "Weer usage examples",
+  "scripts": {
+    "clean": "shx rm -rf dist && mkdir dist && mkdir dist/vendor",
+    "get-debug": "curl https://wzrd.in/standalone/debug@2.6.8 > dist/vendor/optional-debug.js",
+    "copy-weer": "shx cp -r ./node_modules/weer/umd/index.js dist/vendor/weer.js",
+    "copy-vendors": "npm run get-debug && npm run copy-weer",
+    "copy-ext": "shx cp ./src/manifest.json ./dist/. && cp -r ./src/pages ./dist/.",
+    "prepare": "npm run clean && npm run copy-ext && npm run copy-vendors",
+    "without-bundlers": "npm run prepare && shx cp ./src/without-bundlers/index.js ./dist/.",
+    "webpack": "npm run prepare && webpack ./src/esm-for-bundlers/index.js ./dist/index.js",
+    "rollup": "npm run prepare && rollup -c"
+  },
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "license": "GPLv3",
+  "devDependencies": {
+    "debug": "^2.6.8",
+    "rollup": "^0.45.2",
+    "shx": "^0.2.2",
+    "webpack": "^3.4.1"
+  },
+  "dependencies": {
+    "weer": "0.0.0"
+  }
+}
