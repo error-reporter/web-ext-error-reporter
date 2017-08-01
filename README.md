@@ -7,9 +7,23 @@
 1. In background script of your extension
 ```js
 import Weer from 'weer';
-Weer.Install();
+Weer.Install({
+  errorReportingUrl: 'https://example.com/foo?title={{message}}&json={{json}}',
+  extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
+  pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
+  maskIconUrl: 'https://example.com/img/mask-128.png',
+});
+window.Weer = Weer; // For useage from other windows (popup, settings, etc).
 
 throw new Error('This is caught by Weer');
+```
+
+If you need only a part of API:
+
+```js
+import Utils from 'weer/esm/utils';
+import ErrorCatchers from 'weer/esm/error-catchers';
+import GetNotifiersSingleton from 'weer/esm/get-notifiers-singleton';
 
 ```
 2. In non-bg window of your extension (popup, e.g.)
@@ -50,7 +64,7 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
 }));
 
 ```
-3. Follow previous rule or otherwise:
+3. Follow previous rule or face https://crbug.com/357568:
 ```js
 // In non-bg window of extension:
 'use strict';
@@ -77,8 +91,6 @@ chrome.tabs.getCurrent(() => setTimeout(() => {
   throw new Error('Timeouted Chrome API callback (caught by Weer)');
 
 }, 0));
-
-// See https://crbug.com/357568 for more details.
 ```
 
 ### Setup Examples

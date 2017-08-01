@@ -7,7 +7,7 @@
   "module": "./esm/",
 
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
-  "license": "GPLv3",
+  "license": "GPL-3.0+",
 
   "repository": {
     "type": "git",

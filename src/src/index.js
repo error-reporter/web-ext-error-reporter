@@ -7,11 +7,12 @@ const Install = (configs) => {
   const { handleErrorMessage } = GetNotifiersSingleton(configs);
   ErrorCatchers.installListenersOn({ handleErrorMessage });
 
-}
+};
 
-export {
+export default {
   Utils,
   ErrorCatchers,
   GetNotifiersSingleton,
   Install,
 };
+

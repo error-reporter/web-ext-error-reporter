@@ -14,7 +14,7 @@
     "prod": "flow status && npm run build:prod"
   },
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
-  "license": "GPLv3",
+  "license": "GPL-3.0+",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^4.3.0",
