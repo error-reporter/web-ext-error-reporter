@@ -13,6 +13,7 @@ Weer.Install(
 }
 */
 );
+window.Weer = Weer;
 
 window.bar = function foo() {
   throw new Error('Err in BG');
