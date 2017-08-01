@@ -105,8 +105,6 @@ const CreateErrorNotifiers = (
       const errors = typeMaybe
         ? { [typeMaybe]: this.typeToPlainError[typeMaybe] }
         : this.typeToPlainError;
-      console.log('TYPE', typeMaybe);
-      console.log('ERRS', errors);
       const versionedErrors = Object.assign({}, errors, {
         version: Versions.current,
         extName,
@@ -291,8 +289,8 @@ export default function getNotifiersSingleton(configs) {
 
       return notifiers.isOn(eventName);
 
-    }
+    },
   };
   return singleton;
 
-};
+}
