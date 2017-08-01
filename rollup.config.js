@@ -2,7 +2,7 @@ import Path from 'path';
 import NodeResolve from 'rollup-plugin-node-resolve';
 import CommonJs from 'rollup-plugin-commonjs';
 
-const srcPath = Path.join('.', 'src');
+const srcPath = Path.join('.', 'src', 'src');
 const inSrc = (relPath) => Path.join(srcPath, relPath);
 
 const plugins = [

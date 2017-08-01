@@ -9,6 +9,18 @@
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPLv3",
 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/error-reporter/web-ext-error-reporter"
+  },
+  "keywords": [
+    "web-extensions",
+    "error",
+    "report",
+    "chrome",
+    "firefox"
+  ],
+
   "devDependencies": {
     "debug": "^2.6.8"
   }
