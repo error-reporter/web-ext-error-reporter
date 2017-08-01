@@ -1,0 +1,32 @@
+{
+
+  "manifest_version": 2,
+
+  "name": "Weer Test",
+  "description": "Blow up internet!",
+  "version": "0.0.0.1",
+  "author": "homerjsimpson@example.com",
+  "homepage_url": "https://cool-extension.example.com",
+
+  "permissions": [
+      "activeTab"
+    , "notifications"
+    , "<all_urls>"
+  ],
+
+  "background": {
+
+    "persistent": false,
+    "scripts": [
+      "./vendor/optional-debug.js",
+      "./vendor/weer.js",
+      "./index.js"
+    ]
+
+  },
+
+  "browser_action": {
+    "default_popup": "./pages/popup/index.html"
+  }
+
+}

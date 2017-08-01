@@ -1,3 +1,7 @@
-# Error Reporter for Web Extensions
+# Web Extensions Error Reporter (WEER)
 
-__Status__: not ready
+`npm install --save weer`
+
+## Usage Examples
+
+See [examples](./examples) folder in weer repository.
