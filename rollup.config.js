@@ -100,7 +100,7 @@ export default [
     plugins,
     entry: inSrc('index.js'),
     targets: [
-      { dest: './dist/umd/all.js', format: 'umd',
+      { dest: './dist/umd/index.js', format: 'umd',
         moduleName: 'Weer',
         globals
       }
