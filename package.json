@@ -5,7 +5,9 @@
   "main": "./dist/cjs/",
   "module": "./dist/esm/",
   "scripts": {
-    "lint": "eslint ./src/**/*.js --ignore-pattern vendor",
+    "lint-src": "eslint ./src/**/*.js --ignore-pattern vendor",
+    "lint-examples": "eslint ./examples/src/**/*.js --ignore-pattern vendor",
+    "lint": "npm run lint-src",
     "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/.",
     "check": "flow status",
     "start-flow": "flow server",
@@ -28,6 +30,5 @@
     "shx": "^0.2.2"
   },
   "dependencies": {
-    "errio": "^1.2.2"
   }
 }

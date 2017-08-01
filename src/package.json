@@ -2,13 +2,10 @@
   "name": "weer",
   "version": "0.0.0",
   "description": "Web Extensions Error Reporter (WEER)",
-
   "main": "./cjs/",
   "module": "./esm/",
-
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPL-3.0+",
-
   "repository": {
     "type": "git",
     "url": "https://github.com/error-reporter/web-ext-error-reporter"
@@ -18,8 +15,10 @@
     "error",
     "report"
   ],
-
   "devDependencies": {
     "debug": "^2.6.8"
+  },
+  "dependencies": {
+    "errio": "^1.2.2"
   }
 }

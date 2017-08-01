@@ -29,7 +29,7 @@ const errorEventToPlainObject = (errEv) => {
 
 };
 
-const bgName = 'BG'
+const bgName = 'BG';
 
 export default {
 
@@ -48,7 +48,7 @@ export default {
         'Messaging from BG window to itself is not allowed,' +
         ' provide message handler for such cases.',
       );
-      Utils.assert(nameForDebug === 'BG', ``);
+      Utils.assert(nameForDebug === 'BG', bgIsBg);
     } else {
       Utils.assert(nameForDebug !== 'BG', bgIsBg);
     }

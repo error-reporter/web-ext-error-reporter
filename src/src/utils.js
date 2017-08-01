@@ -69,7 +69,7 @@ const Utils = {
 
   assert(value = Utils.mandatory()) {
 
-    if(!value) {
+    if (!value) {
       throw new Error(`Assertion failed, value: ${value}`);
     }
 

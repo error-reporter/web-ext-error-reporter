@@ -12,7 +12,7 @@ const plugins = [
   }),
   CommonJs({
     include: [
-      './node_modules/**'
+      './src/node_modules/**'
     ]
   })
 ];
