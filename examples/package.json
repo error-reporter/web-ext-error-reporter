@@ -3,19 +3,20 @@
   "version": "0.0.0",
   "description": "Weer usage examples",
   "scripts": {
-    "clean": "shx rm -rf dist && mkdir dist && mkdir dist/vendor",
-    "get-debug": "curl https://wzrd.in/standalone/debug@2.6.8 > dist/vendor/optional-debug.js",
-    "copy-weer": "shx cp -r ./node_modules/weer/umd/index.js dist/vendor/weer.js",
-    "copy-vendors": "npm run get-debug && npm run copy-weer",
-    "copy-ext": "shx cp ./src/manifest.json ./dist/. && cp -r ./src/pages ./dist/.",
-    "prepare": "npm run clean && npm run copy-ext && npm run copy-vendors",
-    "without-bundlers": "npm run prepare && shx cp ./src/without-bundlers/index.js ./dist/.",
+    "clean": "shx rm -rf dist && mkdir dist",
+    "copy-vendor": "shx cp -r ./src/vendor dist/.",
+    "copy-ext": "shx cp ./src/manifest.json ./dist/. && shx cp -r ./src/pages ./dist/.",
+    "dummy-weer": "shx touch ./dist/vendor/weer.js",
+    "prepare": "npm run clean && npm run copy-vendor && npm run copy-ext && npm run dummy-weer",
+
+    "copy-weer": "shx cp -r ./node_modules/weer/umd/index.js ./dist/vendor/weer.js",
+    "without-bundlers": "npm run prepare && npm run copy-weer && shx cp ./src/without-bundlers/index.js ./dist/.",
     "webpack": "npm run prepare && webpack ./src/esm-for-bundlers/index.js ./dist/index.js",
     "rollup": "npm run prepare && rollup -c",
     "start": "npm run without-bundlers"
   },
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
-  "license": "GPLv3",
+  "license": "GPL-3.0+",
   "devDependencies": {
     "debug": "^2.6.8",
     "rollup": "^0.45.2",
