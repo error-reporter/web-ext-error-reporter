@@ -11,7 +11,8 @@
     "prepare": "npm run clean && npm run copy-ext && npm run copy-vendors",
     "without-bundlers": "npm run prepare && shx cp ./src/without-bundlers/index.js ./dist/.",
     "webpack": "npm run prepare && webpack ./src/esm-for-bundlers/index.js ./dist/index.js",
-    "rollup": "npm run prepare && rollup -c"
+    "rollup": "npm run prepare && rollup -c",
+    "start": "npm run without-bundlers"
   },
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPLv3",

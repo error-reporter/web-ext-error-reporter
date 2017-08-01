@@ -16,9 +16,7 @@
   "keywords": [
     "web-extensions",
     "error",
-    "report",
-    "chrome",
-    "firefox"
+    "report"
   ],
 
   "devDependencies": {

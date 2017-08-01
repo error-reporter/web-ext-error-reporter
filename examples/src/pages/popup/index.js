@@ -11,7 +11,14 @@ chrome.runtime.getBackgroundPage((bgWindow) =>
 
     };
 
-    throw new Error('PUPERR');
+    //throw new Error('PUPERR');
+
+    chrome.tabs.getCurrent(() => {
+
+      throw new Error('Chrome API callback (not caught by Weer)');
+
+    });
 
   })
 );
+
