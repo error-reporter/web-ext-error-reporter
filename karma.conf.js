@@ -1,25 +1,35 @@
 'use strict';
 
 
-const target = process.env.TEST_TARGET;
+const testTarget = process.env.TEST_TARGET;
 const allowedTargets = [
   'index',
   'utils',
   'error-catchers',
   'get-notifiers-singleton',
 ];
-if (!allowedTargets.includes(target)) {
-  throw new Error(
-    'Please, provide TEST_TARGET env variable. Allowed targets: '
-    + JSON.stringify(allowedTargets),
+if (!allowedTargets.includes(testTarget)) {
+  console.error(
+    'Please, provide TEST_TARGET environment variable. Allowed targets:',
+    allowedTargets.join(', ') + '.',
   );
+  process.exit(1);
 }
 
-const targetedFiles = [
-  `./dist/umd/${target}.js`,
-  `./test/unit/${target}/**/*.js`,
-];
+const getUmd = (target) => `./dist/umd/${target}.js`;
 
+const deps = ['utils', 'index'].includes(testTarget)
+  ? [/* No deps. */]
+  : [
+      getUmd('utils'),
+  ]
+;
+
+const targetedFiles = [
+  ...deps,
+  getUmd(testTarget),
+  `./test/unit/${testTarget}/**/*.js`,
+];
 
 module.exports = function(config) {
   config.set({
