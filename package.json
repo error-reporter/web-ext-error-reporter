@@ -14,7 +14,9 @@
     "forever-flow": "flow stop && forever start -c \"npm run start-flow\" ./",
     "start": "flow status && npm run build:dev",
     "prod": "flow status && npm run build:prod",
-    "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
+    "test:unit": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
+    "test:unit:all": "for t in ./test/unit/*; do env TEST_TARGET=`basename $t` npm run test:unit --silent || exit 1; done",
+    "test": "npm run test:unit:all --silent"
   },
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPL-3.0+",

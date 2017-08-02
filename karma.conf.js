@@ -1,5 +1,25 @@
-// Karma configuration
-// Generated on Wed Aug 02 2017 17:02:20 GMT+0500 (+05)
+'use strict';
+
+
+const target = process.env.TEST_TARGET;
+const allowedTargets = [
+  'index',
+  'utils',
+  'error-catchers',
+  'get-notifiers-singleton',
+];
+if (!allowedTargets.includes(target)) {
+  throw new Error(
+    'Please, provide TEST_TARGET env variable. Allowed targets: '
+    + JSON.stringify(allowedTargets),
+  );
+}
+
+const targetedFiles = [
+  `./dist/umd/${target}.js`,
+  `./test/unit/${target}/**/*.js`,
+];
+
 
 module.exports = function(config) {
   config.set({
@@ -18,8 +38,7 @@ module.exports = function(config) {
       './node_modules/sinon/pkg/sinon.js',
       './node_modules/sinon-chrome/bundle/sinon-chrome.min.js',
       './test/mocks.js',
-      './dist/umd/index.js',
-      './test/unit/**/*.js',
+      ...targetedFiles,
     ],
 
 
