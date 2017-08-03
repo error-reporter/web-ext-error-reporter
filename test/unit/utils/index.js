@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Weer', () => {
+describe('Weer.Utils', () => {
 
   it('exports global Weer variable', () => {
     assert.isDefined(Weer, 'Weer is defined');
