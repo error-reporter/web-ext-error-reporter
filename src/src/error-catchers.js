@@ -53,8 +53,7 @@ export default {
       Utils.assert(nameForDebug !== 'BG', bgIsBg);
     }
 
-    const ifUseCapture = true;
-    hostWindow.addEventListener('error', (errEvent) => {
+    const listener = (errEvent) => {
 
       debug(nameForDebug, errEvent);
       const plainObj = errorEventToPlainObject(errEvent);
@@ -71,21 +70,30 @@ export default {
         hostWindow.chrome.runtime.sendMessage(msg);
       }
 
-      // errEvent.preventDefault();
-      // return false;
+    };
 
-    }, ifUseCapture);
+    const ifUseCapture = true;
+    hostWindow.addEventListener('error', listener, ifUseCapture);
 
-    hostWindow.addEventListener('unhandledrejection', (event) => {
+    const rejHandler = (event) => {
 
       event.preventDefault();
       throw event.reason;
 
-    });
+    };
+
+    hostWindow.addEventListener('unhandledrejection', rejHandler, ifUseCapture);
 
     if (cb) {
       Utils.timeouted(cb)();
     }
+
+    return function uninstallListeners() {
+
+      hostWindow.removeEventListener('error', listener, ifUseCapture);
+      hostWindow.removeEventListener('unhandledrejection', rejHandler, ifUseCapture);
+
+    };
 
   },
 
