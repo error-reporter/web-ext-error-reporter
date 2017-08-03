@@ -31,6 +31,11 @@ const Utils = {
     if (!err) {
       return;
     }
+    /*
+      Example of lastError:
+        `chrome.runtime.openOptionsPage(() => console.log(chrome.runtime.lastError))`
+        {message: "Could not create an options page."}
+    */
     return new Error(err.message); // Add stack.
 
   },
@@ -38,7 +43,7 @@ const Utils = {
   timeouted(cb = Utils.mandatory) {
 
     // setTimeout fixes error context, see https://crbug.com/357568
-    return (...args) => setTimeout(() => cb(...args), 0);
+    return (...args) => { setTimeout(() => cb(...args), 0); };
 
   },
 
