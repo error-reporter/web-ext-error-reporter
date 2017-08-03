@@ -122,8 +122,9 @@ const CreateErrorNotifiers = (
 
     },
 
-    isOn(eventName) {
+    isOn(eventName = Utils.mandatory()) {
 
+      Utils.assert(['ext-error', 'pac-error'].includes(eventName));
       // 'On' by default.
       return this.state(ifPrefix + eventName) !== 'off';
 
@@ -132,7 +133,7 @@ const CreateErrorNotifiers = (
     async mayNotify(
       errorType,
       title,
-      plainErrorOrMessage,
+      plainErrorOrMessage = Utils.mandatory(),
       {
         context = `${extName} ${extBuild}`,
         ifSticky = true,
@@ -140,7 +141,7 @@ const CreateErrorNotifiers = (
     ) {
 
       if (!this.isOn(errorType)) {
-        return;
+        return Promise.resolve(false);
       }
       this.typeToPlainError[errorType] = plainErrorOrMessage;
       const message = plainErrorOrMessage.message || plainErrorOrMessage.toString();
@@ -168,9 +169,12 @@ const CreateErrorNotifiers = (
         });
       }
 
-      chrome.notifications.create(
-        `${notyPrefix}${errorType}`,
-        opts,
+      return new Promise((resolve) =>
+        chrome.notifications.create(
+          `${notyPrefix}${errorType}`,
+          opts,
+          () => resolve(true),
+        )
       );
 
     },
@@ -185,7 +189,7 @@ const CreateErrorNotifiers = (
       const handleErrorMessage = (message) => {
 
         const err = message.errorData;
-        this.mayNotify('ext-error', 'Extension error', err);
+        return this.mayNotify('ext-error', 'Extension error', err);
 
       };
 
@@ -248,7 +252,7 @@ const CreateErrorNotifiers = (
 
 let singleton = false;
 
-export default function getNotifiersSingleton(configs) {
+export default function GetNotifiersSingleton(configs) {
 
   if (singleton) {
     return singleton;
@@ -278,7 +282,7 @@ export default function getNotifiersSingleton(configs) {
       );
       const eventNames = eventName
         ? [eventName]
-        : this.getErrorTypeToLabelMap().keys();
+        : [...this.getErrorTypeToLabelMap().keys()];
       eventNames.forEach((name) =>
         notifiers.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off'),
       );
