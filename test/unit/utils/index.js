@@ -135,22 +135,6 @@ describe('Weer.Utils', () => {
 
   });
 
-  const catchGlobal = (errHandler) => {
-
-    const originalOnError = window.onerror;
-    window.onerror = () => {};
-    window.addEventListener('error', (errEvent) => {
-
-      window.onerror = originalOnError;
-      setTimeout(() => errHandler(errEvent.error), 0);
-
-    }, {
-      capture: true,
-      once: true,
-    });
-
-  };
-
   it('provides `getOrDie`', (done) => {
 
     assert.isDefined(Utils.getOrDie, '`Utils.getOrDie` is defined');
