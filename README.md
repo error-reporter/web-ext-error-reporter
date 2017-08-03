@@ -1,5 +1,11 @@
 # Web Extensions Error Reporter (WEER)
 
+## Status
+
+Early alpha, API changes, no tests.
+
+## Install
+
 `npm install --save weer`
 
 ## Usage
