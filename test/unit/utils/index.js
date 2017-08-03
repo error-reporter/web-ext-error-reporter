@@ -172,10 +172,11 @@ describe('Weer.Utils', () => {
 
   it('provides `assert`', () => {
 
-    expect(Utils.assert, 'throws if no arguments').to.throw(TypeError);
+    expect(Utils.assert, 'throws if no arguments').to.throw(Error);
     expect(() => Utils.assert(null), 'throws if falsy arg').to.throw(Error);
     expect(() => Utils.assert(''), 'throws if empty string').to.throw(Error);
-    expect(() => Utils.assert(undefined), 'throws if underfined').to.throw(Error);
+    expect(() => Utils.assert(undefined), 'throws if undefined').to.throw(Error);
+    expect(() => Utils.assert(undefined, 'BAZZ'), 'throws if undefined').to.throw(Error, 'BAZZ');
     expect(() => Utils.assert(true)).to.not.throw();
     expect(() => Utils.assert('a')).to.not.throw();
     expect(() => Utils.assert(2)).to.not.throw();

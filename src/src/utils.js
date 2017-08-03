@@ -72,10 +72,10 @@ const Utils = {
 
   },
 
-  assert(value = Utils.mandatory()) {
+  assert(value, message) {
 
     if (!value) {
-      throw new Error(`Assertion failed, value: ${value}`);
+      throw new Error(message || `Assertion failed, value: ${value}`);
     }
 
   },
