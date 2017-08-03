@@ -47,7 +47,8 @@ module.exports = function(config) {
     files: [
       './node_modules/sinon/pkg/sinon.js',
       './node_modules/sinon-chrome/bundle/sinon-chrome.min.js',
-      './test/mocks.js',
+      './vendor/optional-debug.js',
+      './test/lib.js',
       ...targetedFiles,
     ],
 
