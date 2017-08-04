@@ -8,6 +8,7 @@
     "lint-src": "eslint ./src/**/*.js --ignore-pattern vendor",
     "lint-examples": "eslint ./examples/src/**/*.js --ignore-pattern vendor",
     "lint": "npm run lint-src",
+    "prebuild": "cd ./src && npm install",
     "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/.",
     "check": "flow status",
     "start-flow": "flow server",
