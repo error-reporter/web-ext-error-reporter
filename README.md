@@ -1,5 +1,7 @@
 # Web Extensions Error Reporter (WEER)
 
+![Weer screenshot](https://rebrand.ly/weer-screenshot)
+
 ## Status [![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
 
 Needs review
