@@ -7,7 +7,7 @@ describe('Weer', () => {
     assert.isDefined(Weer.Utils, 'Weer.Utils is defined');
     assert.isDefined(Weer.ErrorCatchers, 'Weer.ErrorCatchers is defined');
     assert.isDefined(Weer.GetNotifiersSingleton, 'Weer.GetNotifiersSingleton is defined');
-    assert.isDefined(Weer.Install, 'Weer.Install is defined');
+    assert.isDefined(Weer.install, 'Weer.Install is defined');
   });
 
 });

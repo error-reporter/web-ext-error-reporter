@@ -2,10 +2,11 @@ import Utils from './utils';
 import ErrorCatchers from './error-catchers';
 import GetNotifiersSingleton from './get-notifiers-singleton';
 
-const Install = (configs) => {
+const install = (configs) => {
 
   const { handleErrorMessage } = GetNotifiersSingleton(configs);
-  ErrorCatchers.installListenersOn({ handleErrorMessage });
+  const uninstall = ErrorCatchers.installListenersOn({ handleErrorMessage });
+  return uninstall;
 
 };
 
@@ -13,6 +14,6 @@ export default {
   Utils,
   ErrorCatchers,
   GetNotifiersSingleton,
-  Install,
+  install,
 };
 
