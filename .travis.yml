@@ -8,11 +8,7 @@ before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 - sleep 3
-jobs:
-  include:
-    - stage: lint
-    - script: npm run lint
-    - stage: build-and-test
-    - script:
-      - npm run build
-      - npm run test
+script:
+  - npm run lint || travis_terminate 1
+  - npm run build || travis_terminate 1
+  - npm run test || travis_terminate 1
