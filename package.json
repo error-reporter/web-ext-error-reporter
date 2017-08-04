@@ -16,7 +16,7 @@
     "start": "flow status && npm run build:dev",
     "prod": "flow status && npm run build:prod",
     "test:unit": "karma start karma.conf.js",
-    "test:dev": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
+    "test:dev": "TEST_TARGET=$TEST_TARGET karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "test:unit:all": "for t in ./test/unit/*; do env TEST_TARGET=`basename $t` npm run test:unit --silent || exit 1; done",
     "test": "npm run test:unit:all --silent"
   },
