@@ -2,7 +2,7 @@
 
 ## Status [![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
 
-API review
+Needs review
 
 ## Install
 
