@@ -8,8 +8,8 @@
     "copy-ext": "shx cp ./src/manifest.json ./dist/. && shx cp -r ./src/pages ./dist/.",
     "dummy-weer": "shx touch ./dist/vendor/weer.js",
     "prepare": "npm run clean && npm run copy-vendor && npm run copy-ext && npm run dummy-weer",
+    "copy-weer": "shx cp -r ../dist/umd/index.js ./dist/vendor/weer.js",
 
-    "copy-weer": "shx cp -r ./node_modules/weer/umd/index.js ./dist/vendor/weer.js",
     "without-bundlers": "npm run prepare && npm run copy-weer && shx cp ./src/without-bundlers/index.js ./dist/.",
     "webpack": "npm run prepare && webpack ./src/esm-for-bundlers/index.js ./dist/index.js",
     "rollup": "npm run prepare && rollup -c",
@@ -24,6 +24,5 @@
     "webpack": "^3.4.1"
   },
   "dependencies": {
-    "weer": "0.0.0"
   }
 }
