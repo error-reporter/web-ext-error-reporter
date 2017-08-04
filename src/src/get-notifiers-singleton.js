@@ -174,7 +174,7 @@ const CreateErrorNotifiers = (
           `${notyPrefix}${errorType}`,
           opts,
           () => resolve(true),
-        )
+        ),
       );
 
     },
