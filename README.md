@@ -13,7 +13,8 @@ Needs review
 1. In background script of your extension
 ```js
 import Weer from 'weer';
-Weer.Install({
+Weer.install({
+  // Optional:
   errorReportingUrl: 'https://example.com/foo?title={{message}}&json={{json}}',
   extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
   pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
@@ -21,7 +22,7 @@ Weer.Install({
 });
 window.Weer = Weer; // For useage from other windows (popup, settings, etc).
 
-throw new Error('This is caught by Weer');
+throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
 ```
 
 If you need only a part of API:
@@ -103,10 +104,22 @@ chrome.tabs.getCurrent(() => setTimeout(() => {
 
 See [examples](./examples) of setups for webpack, rollup or without bundlers.
 
+### Demo
+
+```
+clone this repo
+npm install
+cd examples
+npm start
+ls dist <- Load as unpacked extension and play (tested on Chrome).
+```
+
 ## Supported Browsers
 
 Chrome: yes  
-Firefox: yes, but notifications are not sticky
+Firefox: yes, but notifications are not sticky, unhandled proimise rejections are [never] caught.
+
+[never]: https://developer.mozilla.org/en-US/docs/Web/Events/unhandledrejection#Browser_compatibility
 
 ## Debugging
 
