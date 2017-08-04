@@ -1,8 +1,8 @@
 # Web Extensions Error Reporter (WEER)
 
-## Status
+## Status [![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
 
-Early alpha, API changes, no tests.
+API review
 
 ## Install
 
