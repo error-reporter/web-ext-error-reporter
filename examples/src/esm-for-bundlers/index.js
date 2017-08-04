@@ -1,9 +1,9 @@
-import Weer from 'weer';
+import Weer from '../dist/esm';
 
 console.log('Extension started.');
 console.log('Weer is:', Weer);
 
-Weer.Install(
+Weer.install(
 /*
 {
   errorReportingUrl: 'https://example.com/foo?title={{message}}&json={{json}}',
