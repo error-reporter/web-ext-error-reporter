@@ -93,7 +93,7 @@ module.exports = function(config) {
     browsers: [
       'ChromeHeadless',
       'Firefox',
-      'ChromeCanary',
+//      'ChromeCanary',
     ],
 
 
