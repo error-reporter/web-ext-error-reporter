@@ -78,6 +78,7 @@ export default {
     const rejHandler = (event) => {
 
       event.preventDefault();
+      debug(nameForDebug, 'rethrowing promise...');
       throw event.reason;
 
     };
