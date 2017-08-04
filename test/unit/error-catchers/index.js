@@ -149,25 +149,27 @@ describe('Weer.ErrorCatchers', () => {
 
     });
 
-    it('catches rejected promises on real window', (done) => {
+    if (/Chrome/.test(navigator.userAgent)) {
+      it('catches rejected promises on real window', (done) => {
 
-      const handleErrorMessage = sinon.spy();
-      const uninstall = install({
-        handleErrorMessage,
+        const handleErrorMessage = sinon.spy();
+        const uninstall = install({
+          handleErrorMessage,
+        });
+
+        const reason = new TypeError('REASON');
+        catchGlobal((thrown) => {
+
+          expect(thrown).to.equal(reason);
+          expect(handleErrorMessage.callCount).to.equal(1);
+          uninstall();
+          done();
+
+        });
+        Promise.resolve().then( () => Promise.reject(reason) );
+
       });
-
-      const reason = new TypeError('REASON');
-      catchGlobal((thrown) => {
-
-        expect(thrown).to.equal(reason);
-        expect(handleErrorMessage.callCount).to.equal(1);
-        uninstall();
-        done();
-
-      });
-      Promise.resolve().then( () => Promise.reject(reason) );
-
-    });
+    }
 
   });
 
