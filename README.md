@@ -52,7 +52,7 @@ import GetNotifiersSingleton from 'weer/esm/get-notifiers-singleton';
 #### Without Bundlers
 
 ```console
-<$ cp ./node_modules/umd/index.js ./foo-extension/vendor/weer.js
+<$ cp ./node_modules/weer/umd/index.js ./foo-extension/vendor/weer.js
 <$ cat foo-extension/manifest.json
 >$ "scripts": ["./vendor/weer.js", ...],
 ```
