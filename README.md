@@ -13,7 +13,7 @@ Needs review
 ## Usage
 
 ```console
-tree ./node_nodules/weer
+tree ./node_modules/weer
 weer/
 ├── cjs // Common JS format: `require(...)`
 │   ├── error-catchers.js
