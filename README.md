@@ -12,9 +12,55 @@ Needs review
 
 ## Usage
 
-1. In background script of your extension
+```console
+tree ./node_nodules/weer
+weer/
+├── cjs // Common JS format: `require(...)`
+│   ├── error-catchers.js
+│   ├── get-notifiers-singleton.js
+│   ├── index.js
+│   └── utils.js
+├── esm // EcmaScript Modules format: `import ...`
+│   ├── error-catchers.js
+│   ├── get-notifiers-singleton.js
+│   ├── index.js
+│   └── utils.js
+├── package.json
+└── umd // Universal Module Definition format: `<script src=...></script>`
+    ├── error-catchers.js // Requires `utils` bundle
+    ├── get-notifiers-singleton.js // Requires `utils` bundle
+    ├── index.js // All in one bundle, no dependencies
+    └── utils.js
+```
+### Import
+
+#### With Bundler (Webpack or Rollup)
+
 ```js
 import Weer from 'weer';
+window.Weer = Weer; // For usage from non-bg windows (popup, settings, etc).
+```
+
+If you need only a part of the API:
+
+```js
+import Utils from 'weer/esm/utils';
+import ErrorCatchers from 'weer/esm/error-catchers';
+import GetNotifiersSingleton from 'weer/esm/get-notifiers-singleton';
+```
+
+#### Without Bundlers
+
+```console
+<$ cp ./node_modules/umd/index.js ./foo-extension/vendor/weer.js
+<$ cat foo-extension/manifest.json
+>$ "scripts": ["./vendor/weer.js", ...],
+```
+
+### Install And Use
+
+In background script of your extension:
+```js
 Weer.install({
   // Optional:
   errorReportingUrl: 'https://example.com/foo?title={{message}}&json={{json}}',
@@ -22,20 +68,11 @@ Weer.install({
   pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
   maskIconUrl: 'https://example.com/img/mask-128.png',
 });
-window.Weer = Weer; // For useage from other windows (popup, settings, etc).
 
 throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
 ```
 
-If you need only a part of API:
-
-```js
-import Utils from 'weer/esm/utils';
-import ErrorCatchers from 'weer/esm/error-catchers';
-import GetNotifiersSingleton from 'weer/esm/get-notifiers-singleton';
-
-```
-2. In non-bg window of your extension (popup, e.g.)
+In non-bg window of your extension (popup, e.g.)
 ```js
 'use strict';
 
@@ -73,7 +110,8 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
 }));
 
 ```
-3. Follow previous rule or face https://crbug.com/357568:
+
+Follow previous rules or face https://crbug.com/357568:
 ```js
 // In non-bg window of extension:
 'use strict';
