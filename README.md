@@ -129,3 +129,7 @@ Firefox: yes, but notifications are not sticky, unhandled proimise rejections ar
 2. Enable it by `debug.enable('weer:*')` in extension background window and reload extension.
 
 [visionmedia/debug]: https://github.com/visionmedia/debug
+
+## Credits
+
+For credits of used assets see https://github.com/error-reporter/error-reporter.github.io
