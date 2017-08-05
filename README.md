@@ -16,14 +16,17 @@
     - [Without Bundler](#without-bundler)
   - [Install and Use](#install-and-use)
     - [One Rule to Know](#one-rule-to-know)
-    - [In Background Script](#in-background-script)
-    - [In Non-Background Script](#in-non-background-script)
+    - [Install in Background Script](#install-in-background-script)
+    - [Install in Non-Background Script](#install-in-non-background-script)
   - [Debugging](#debugging)
   - [Examples of Setups](#examples-of-setups)
   - [Demo](#demo)
 - [Supported Browsers](#supported-browsers)
 - [API](#api)
-
+- [Maintainer](#maintainer)
+- [Contribute](#contribute)
+- [Credits](#credits)
+- [License](#license)
 
 ## Install
 
