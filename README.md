@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
 
-> Web Extensions Error Reporter catches global errors, shows notifications which open error reporter if clicked.
+> Web Extensions Error Reporter catches global errors, shows notifications and opens error reporter on click
 
 ## Table of Contents
 
