@@ -57,7 +57,7 @@ import GetNotifiersSingleton from 'weer/esm/get-notifiers-singleton';
 >$ "scripts": ["./vendor/weer.js", ...],
 ```
 
-### Install And Use
+### Install and Use
 
 In background script of your extension:
 ```js
