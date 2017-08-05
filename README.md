@@ -1,16 +1,37 @@
-# WEER: Web Extensions Error Reporter
+# Weer
 
 ![Weer screenshot](https://rebrand.ly/weer-screenshot)
 
-## Status [![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
+[![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
 
-Needs review
+> Web Extensions Error Reporter
+
+## Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+  - [Formats](#formats)
+  - [Import](#import)
+    - [With Bundler](#with-bundler)
+    - [Without Bundler](#without-bundler)
+  - [Install and Use](#install-and-use)
+    - [One Rule to Know](#one-rule-to-know)
+    - [In Background Script](#in-background-script)
+    - [In Non-Background Script](#in-non-background-script)
+  - [Debugging](#debugging)
+  - [Examples of Setups](#examples-of-setups)
+  - [Demo](#demo)
+- [Supported Browsers](#supported-browsers)
+- [API](#api)
+
 
 ## Install
 
 `npm install --save weer`
 
 ## Usage
+
+### Formats
 
 ```console
 tree ./node_modules/weer
@@ -34,7 +55,9 @@ weer/
 ```
 ### Import
 
-#### With Bundler (Webpack or Rollup)
+#### With Bundler
+
+For webpack, rollup, etc.
 
 ```js
 import Weer from 'weer';
@@ -49,17 +72,61 @@ import ErrorCatchers from 'weer/esm/error-catchers';
 import GetNotifiersSingleton from 'weer/esm/get-notifiers-singleton';
 ```
 
-#### Without Bundlers
+#### Without Bundler
 
 ```console
-<$ cp ./node_modules/weer/umd/index.js ./foo-extension/vendor/weer.js
-<$ cat foo-extension/manifest.json
->$ "scripts": ["./vendor/weer.js", ...],
+$ cp ./node_modules/weer/umd/index.js ./foo-extension/vendor/weer.js
+$ cat foo-extension/manifest.json
+...
+"scripts": [
+  "./vendor/optional-debug.js",
+  "./vendor/weer.js",
+  ...
+],
+...
 ```
 
 ### Install and Use
 
-In background script of your extension:
+#### One Rule to Know
+
+There is some mess in how you catch errors in a web-extension:
+
+```js
+// In non-bg window of extension:
+'use strict';
+
+window.addEventListener('error', (errorEvent) => {/* ... */});
+
+// Case 1
+throw new Error('Root (not caught by handler');
+
+// Case 2
+setTimeout(
+  () => { throw new Error('Timeouted root (caught by handler'); },
+  0,
+);
+
+// Case 3
+chrome.tabs.getCurrent(() => {
+
+  throw new Error('Chrome API callback (not caught by handler)');
+
+});
+
+// Case 4
+chrome.tabs.getCurrent(() => setTimeout(() => {
+
+  throw new Error('Timeouted Chrome API callback (caught by handlers)');
+
+}, 0));
+```
+So if you want error catchers to work — your code must be wrapped in `setTimeout`.
+
+This behavior may be a bug and is discussed in https://crbug.com/357568.
+
+#### In Background Script
+
 ```js
 Weer.install({
   // Optional:
@@ -72,8 +139,10 @@ Weer.install({
 throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
 ```
 
-In non-bg window of your extension (popup, e.g.)
+#### In Non-Background Script
+
 ```js
+// In popup, settings and other pages.
 'use strict';
 
 chrome.runtime.getBackgroundPage((bgWindow) =>
@@ -98,7 +167,6 @@ chrome.runtime.getBackgroundPage((bgWindow) =>
 
     }));
 
-
   })
 );
 
@@ -111,36 +179,15 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
 
 ```
 
-Follow previous rules or face https://crbug.com/357568:
-```js
-// In non-bg window of extension:
-'use strict';
+### Debugging
 
-// Case 1
-throw new Error('Root (not caught by Weer');
+1. Bundle [visionmedia/debug] for your environment and export global `debug`.
+2. Enable it by `debug.enable('weer:*')` in extension background window and reload extension.
 
-// Case 2
-setTimeout(
-  () => { throw new Error('Timeouted root (caught by Weer'); },
-  0,
-);
+[visionmedia/debug]: https://github.com/visionmedia/debug
 
-// Case 3
-chrome.tabs.getCurrent(() => {
 
-  throw new Error('Chrome API callback (not caught by Weer)');
-
-});
-
-// Case 4
-chrome.tabs.getCurrent(() => setTimeout(() => {
-
-  throw new Error('Timeouted Chrome API callback (caught by Weer)');
-
-}, 0));
-```
-
-### Setup Examples
+### Examples of Setups
 
 See [examples](./examples) of setups for webpack, rollup or without bundlers.
 
@@ -161,13 +208,23 @@ Firefox: yes, but notifications are not sticky, unhandled proimise rejections ar
 
 [never]: https://developer.mozilla.org/en-US/docs/Web/Events/unhandledrejection#Browser_compatibility
 
-## Debugging
 
-1. Bundle [visionmedia/debug] for your environment and export global `debug`.
-2. Enable it by `debug.enable('weer:*')` in extension background window and reload extension.
+## API
 
-[visionmedia/debug]: https://github.com/visionmedia/debug
+See [wiki](https://github.com/error-reporter/weer/wiki/API-Documentation).
+
+## Maintainer
+
+- [Ilya Ig. Petrov](https://gitbub.com/ilyaigpetrov)
+
+## Contribute
+
+You are welcome to propose [issues](https://github.com/error-reporter/weer/issues) or pull requests.
 
 ## Credits
 
 For credits of used assets see https://github.com/error-reporter/error-reporter.github.io
+
+## License
+
+[GPL-3.0+](./LICENSE)
