@@ -1,4 +1,4 @@
-# Web Extensions Error Reporter (WEER)
+# WEER: Web Extensions Error Reporter
 
 ![Weer screenshot](https://rebrand.ly/weer-screenshot)
 
