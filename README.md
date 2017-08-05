@@ -96,24 +96,28 @@ $ cat foo-extension/manifest.json
 There is some mess in how you catch errors in a web-extension:
 
 ```js
-// In non-bg window of extension:
 'use strict';
+/*
+  bg-window — background window, main window of a web-extension.
+  non-bg-windows — popup, settings and other pages windows of a web-extension, that are not bg-window.
+*/
+
 
 window.addEventListener('error', (errorEvent) => {/* ... */});
 
 // Case 1
-throw new Error('Root (not caught by handler');
+throw new Error('Root (caught only in bg-window, not caught in non-bg windows');
 
 // Case 2
 setTimeout(
-  () => { throw new Error('Timeouted root (caught by handler'); },
+  () => { throw new Error('Timeouted root (caught by handlers'); },
   0,
 );
 
 // Case 3
 chrome.tabs.getCurrent(() => {
 
-  throw new Error('Chrome API callback (not caught by handler)');
+  throw new Error('Chrome API callback (not caught by handlers)');
 
 });
 
@@ -128,7 +132,7 @@ So if you want error catchers to work — your code must be wrapped in `setTimeo
 
 This behavior may be a bug and is discussed in https://crbug.com/357568.
 
-#### In Background Script
+#### Install in Background Script
 
 ```js
 Weer.install({
@@ -142,7 +146,7 @@ Weer.install({
 throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
 ```
 
-#### In Non-Background Script
+#### Install in Non-Background Script
 
 ```js
 // In popup, settings and other pages.
@@ -222,7 +226,7 @@ See [wiki](https://github.com/error-reporter/weer/wiki/API-Documentation).
 
 ## Contribute
 
-You are welcome to propose [issues](https://github.com/error-reporter/weer/issues) or pull requests.
+You are welcome to propose [issues](https://github.com/error-reporter/weer/issues), pull requests or ask questions.
 
 ## Credits
 
