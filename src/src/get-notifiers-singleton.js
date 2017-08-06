@@ -108,6 +108,8 @@ const CreateErrorNotifiers = (
       const versionedErrors = Object.assign({}, errors, {
         version: Versions.current,
         extName,
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
       });
       const json = JSON.stringify(versionedErrors, null, 2);
       const msg =
