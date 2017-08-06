@@ -2,9 +2,11 @@
 
 ![Weer screenshot](https://rebrand.ly/weer-screenshot)
 
-[![Build Status](https://travis-ci.org/error-reporter/web-ext-error-reporter.svg?branch=master)](https://travis-ci.org/error-reporter/web-ext-error-reporter)
+[![Build Status](https://travis-ci.org/error-reporter/weer.svg?branch=master)](https://travis-ci.org/error-reporter/weer)
 
 > Web Extensions Error Reporter catches global errors, shows notifications and opens error reporter in one click
+
+Status: not ready yet :-(
 
 ## Table of Contents
 
