@@ -6,7 +6,7 @@
 
 > Web Extensions Error Reporter catches global errors, shows notifications and opens error reporter in one click
 
-Status: not ready yet :-(
+[Report page demo](https://error-reporter.github.io/v0/error/view/?title=Err%20in%20BG&json=%7B"payload"%3A%7B"message"%3A"Uncaught%20Error%3A%20Err%20in%20BG"%2C"filename"%3A"chrome-extension%3A%2F%2Fnjhjpcpfmgloiakfbipnjghcanjllmec%2Findex.js"%2C"lineno"%3A10%2C"colno"%3A3%2C"type"%3A"error"%2C"error"%3A%7B"name"%3A"Error"%2C"message"%3A"Err%20in%20BG"%2C"stack"%3A"Error%3A%20Err%20in%20BG%5Cn%20%20%20%20at%20foo%20%28chrome-extension%3A%2F%2Fnjhjpcpfmgloiakfbipnjghcanjllmec%2Findex.js%3A10%3A9%29%5Cn%20%20%20%20at%20chrome-extension%3A%2F%2Fnjhjpcpfmgloiakfbipnjghcanjllmec%2Findex.js%3A14%3A1"%7D%7D%2C"errorType"%3A"ext-error"%2C"extName"%3A"Weer%20Test"%2C"version"%3A"0.0.0.1"%2C"userAgent"%3A"Mozilla%2F5.0%20%28X11%3B%20Linux%20x86_64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F60.0.3112.90%20Safari%2F537.36"%2C"platform"%3A"Linux%20x86_64"%7D#toEmail=DONT_REPORT_PLEASE)
 
 ## Table of Contents
 
