@@ -1,6 +1,6 @@
 # Weer
 
-![Weer screenshot](https://rebrand.ly/weer-screenshot)
+![Weer screenshot](./weer-screenshot-double.png)
 
 [![Build Status](https://travis-ci.org/error-reporter/weer.svg?branch=master)](https://travis-ci.org/error-reporter/weer)
 
