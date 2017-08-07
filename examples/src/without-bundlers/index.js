@@ -1,8 +1,10 @@
+/* eslint-disable no-console, strict */
+
 'use strict';
 
 console.log('Extension started.');
 
-Weer.install({
+window.Weer.install({
   sendReportsToEmail: 'your@email.com',
 });
 
@@ -11,4 +13,4 @@ window.bar = function foo() {
 };
 
 console.log('Throwing error from bg! Notification is expected.');
-bar();
+window.bar();

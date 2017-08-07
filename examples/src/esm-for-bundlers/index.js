@@ -1,4 +1,5 @@
-import Weer from '../dist/esm';
+/* eslint-disable no-console */
+import Weer from '../../../dist/esm';
 
 console.log('Extension started.');
 console.log('Weer is:', Weer);
@@ -14,4 +15,4 @@ window.bar = function foo() {
 };
 
 console.log('Throwing error from bg! Notification is expected.');
-bar();
+window.bar();

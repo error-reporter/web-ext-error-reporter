@@ -61,14 +61,15 @@ const ifPrefix = 'if-on-';
 const extName = chrome.runtime.getManifest().name;
 const extBuild = Versions.currentBuild;
 
-const defaultClickHandler = function(msg, report) {
+const defaultClickHandler = function defaultClickHandler(msg, report) {
 
   const toEmail = this.sendReportsToEmail;
   const json = JSON.stringify(report);
-  const url = 'https://rebrand.ly/view-error/?title={{message}}&json={{json}}'
-    .replace('{{message}}', encodeURIComponent(msg))
-    .replace('{{json}}', encodeURIComponent(json)) +
-      `#toEmail=${encodeURIComponent(toEmail)}`;
+  const url = `${
+    'https://rebrand.ly/view-error/?title={{message}}&json={{json}}'
+      .replace('{{message}}', encodeURIComponent(msg))
+      .replace('{{json}}', encodeURIComponent(json))
+  }#toEmail=${encodeURIComponent(toEmail)}`;
 
   chrome.tabs.create(
     { url },
