@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import Weer from '../../../dist/esm';
+// There is no "dist" folder in Travis:
+import Weer from '../../../dist/esm'; // eslint-disable-line
 
 console.log('Extension started.');
 console.log('Weer is:', Weer);
