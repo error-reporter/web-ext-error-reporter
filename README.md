@@ -138,8 +138,9 @@ This behavior may be a bug and is discussed in https://crbug.com/357568.
 
 ```js
 Weer.install({
+  // Required:
+  sendReportsToEmail: 'homerjsimpson@example.com', // or onNotificationClick: (errMessage, report) => {...}
   // Optional:
-  errorReportingUrl: 'https://example.com/foo?title={{message}}&json={{json}}',
   extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
   pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
   maskIconUrl: 'https://example.com/img/mask-128.png',
