@@ -3,16 +3,10 @@ import Weer from '../dist/esm';
 console.log('Extension started.');
 console.log('Weer is:', Weer);
 
-Weer.install(
-/*
-{
-  errorReportingUrl: 'https://example.com/foo?title={{message}}&json={{json}}',
-  extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
-  pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
-  maskIconUrl: 'https://example.com/img/mask-128.png',
-}
-*/
-);
+Weer.install({
+  sendReportsToEmail: 'your@email.com',
+});
+
 window.Weer = Weer;
 
 window.bar = function foo() {

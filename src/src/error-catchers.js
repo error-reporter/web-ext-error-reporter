@@ -60,7 +60,7 @@ export default {
 
       const msg = {
         to: 'error-reporter',
-        errorData: plainObj,
+        payload: plainObj,
       };
 
       if (ifInBg) {
