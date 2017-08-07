@@ -56,7 +56,19 @@ const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.m
 
 };
 
-const openAndFocus = function openAndFocus(url) {
+const notyPrefix = 'reporter-';
+const ifPrefix = 'if-on-';
+const extName = chrome.runtime.getManifest().name;
+const extBuild = Versions.currentBuild;
+
+const defaultClickHandler = function(msg, report) {
+
+  const toEmail = this.sendReportsToEmail;
+  const json = JSON.stringify(report);
+  const url = 'https://rebrand.ly/view-error/?title={{message}}&json={{json}}'
+    .replace('{{message}}', encodeURIComponent(msg))
+    .replace('{{json}}', encodeURIComponent(json)) +
+      `#toEmail=${encodeURIComponent(toEmail)}`;
 
   chrome.tabs.create(
     { url },
@@ -65,30 +77,28 @@ const openAndFocus = function openAndFocus(url) {
 
 };
 
-const notyPrefix = 'reporter-';
-const ifPrefix = 'if-on-';
-const extName = chrome.runtime.getManifest().name;
-const extBuild = Versions.currentBuild;
-
-/*
-  Configs: {
-    errorReportingUrl:
-      'https://report.example.com?title={{message}}&body={{json}}',
-    icons: {
-      'ext-error': 'https://example.com/icons/ext-err-128.png',
-      'pac-error': 'https://example.com/icons/pac-err-128.png',
-      'mask': 'https://example.com/icons/mask-128.png',
-    }
-  }
-*/
-const CreateErrorNotifiers = (
+const createErrorNotifiers = (
   {
-    errorReportingUrl = 'https://rebrand.ly/view-error/?title={{message}}&json={{json}}',
+    sendReportsToEmail = undefined,
+    onNotificationClick = defaultClickHandler,
     // Icons:
     extErrorIconUrl = 'https://rebrand.ly/ext-error',
     pacErrorIconUrl = 'https://rebrand.ly/pac-error',
     maskIconUrl = false,
   } = {}) => {
+
+  let onNotyClick;
+  {
+    const ifDefault = onNotificationClick === defaultClickHandler;
+    const toEmail = sendReportsToEmail;
+    Utils.assert(
+      ifDefault ? toEmail : true,
+      'Default click handler requires sendReportsToEmail config to be set.',
+    );
+    onNotyClick = ifDefault
+      ? onNotificationClick.bind({ sendReportsToEmail })
+      : onNotificationClick;
+  }
 
   const errorTypeToIconUrl = {
     'ext-error': extErrorIconUrl,
@@ -98,29 +108,25 @@ const CreateErrorNotifiers = (
   const errorNotifiers = {
 
     state: CreateLocalStorage('error-handlers-'),
-    typeToPlainError: {},
+    // ErrorLike is `{message: ...}`. E.g. ErrorEvent.
+    typeToErrorLike: {},
 
-    viewError(typeMaybe) {
+    viewError(errorType) {
 
-      const errors = typeMaybe
-        ? { [typeMaybe]: this.typeToPlainError[typeMaybe] }
-        : this.typeToPlainError;
-      const versionedErrors = Object.assign({}, errors, {
-        version: Versions.current,
+      const payload = this.typeToErrorLike[errorType] || this.typeToErrorLike;
+      const report = Object.assign({}, {
+        payload,
+        errorType,
         extName,
+        version: Versions.current,
         userAgent: navigator.userAgent,
         platform: navigator.platform,
       });
-      const json = JSON.stringify(versionedErrors, null, 2);
+      const err = payload.error || payload;
       const msg =
-        (errors[typeMaybe] && errors[typeMaybe].message)
-        || 'I Found a Bug';
+        (err && err.message) || 'I Found a Bug';
 
-      openAndFocus(
-        errorReportingUrl
-          .replace('{{message}}', encodeURIComponent(msg))
-          .replace('{{json}}', encodeURIComponent(json)),
-      );
+      onNotyClick(msg, report);
 
     },
 
@@ -135,7 +141,7 @@ const CreateErrorNotifiers = (
     async mayNotify(
       errorType,
       title,
-      plainErrorOrMessage = Utils.mandatory(),
+      errorLikeOrMessage = Utils.mandatory(),
       {
         context = `${extName} ${extBuild}`,
         ifSticky = true,
@@ -145,8 +151,8 @@ const CreateErrorNotifiers = (
       if (!this.isOn(errorType)) {
         return Promise.resolve(false);
       }
-      this.typeToPlainError[errorType] = plainErrorOrMessage;
-      const message = plainErrorOrMessage.message || plainErrorOrMessage.toString();
+      this.typeToErrorLike[errorType] = errorLikeOrMessage;
+      const message = errorLikeOrMessage.message || errorLikeOrMessage.toString();
 
       const iconUrl = await loadIconAsBlobUrlAsync(
         errorTypeToIconUrl[errorType],
@@ -188,20 +194,20 @@ const CreateErrorNotifiers = (
         instead when caught error in BG window.
         See: https://stackoverflow.com/questions/17899769
       */
-      const handleErrorMessage = (message) => {
+      const handleErrorMessage = (messageObj) => {
 
-        const err = message.errorData;
-        return this.mayNotify('ext-error', 'Extension error', err);
+        const errLike = messageObj.payload;
+        return this.mayNotify('ext-error', 'Extension error', errLike);
 
       };
 
-      chrome.runtime.onMessage.addListener((message) => {
+      chrome.runtime.onMessage.addListener((messageObj) => {
 
-        debug('Received:', message);
-        if (message.to !== 'error-reporter') {
+        debug('Received:', messageObj);
+        if (messageObj.to !== 'error-reporter') {
           return;
         }
-        handleErrorMessage(message);
+        handleErrorMessage(messageObj);
 
       });
 
@@ -259,7 +265,7 @@ export default function GetNotifiersSingleton(configs) {
   if (singleton) {
     return singleton;
   }
-  const notifiers = CreateErrorNotifiers(configs);
+  const notifiers = createErrorNotifiers(configs);
   const handleErrorMessage = notifiers.install();
 
   singleton = {

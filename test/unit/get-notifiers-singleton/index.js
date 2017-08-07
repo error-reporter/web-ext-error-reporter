@@ -10,7 +10,8 @@ describe('Weer.GetNotifiersSingleton', () => {
 
   describe('GetNotifiersSingleton', () => {
 
-    const getNoty = Weer.GetNotifiersSingleton;
+    const getNoty = () =>
+      Weer.GetNotifiersSingleton({ sendReportsToEmail: 'homerjsimpson@example.com' });
     const noty = getNoty();
 
     chrome.notifications.create.callsFake((id, ops, cb) => cb());
@@ -28,7 +29,7 @@ describe('Weer.GetNotifiersSingleton', () => {
 
       expect(noty.handleErrorMessage).to.throw(TypeError);
       expect(chrome.notifications.create.callCount).to.not.be.ok;
-      noty.handleErrorMessage({ errorData: { message: 'Hi from error!', } }).then(
+      noty.handleErrorMessage({ payload: { message: 'Hi from error!', } }).then(
         (ifNotied) => {
 
           expect(ifNotied).to.be.true;
