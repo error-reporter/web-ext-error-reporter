@@ -7,7 +7,7 @@
   "scripts": {
     "lint-src": "eslint ./src/**/*.js --ignore-pattern vendor",
     "lint-examples": "eslint ./examples/src/**/*.js --ignore-pattern vendor",
-    "lint": "npm run lint-src",
+    "lint": "npm run lint-src && npm run lint-examples",
     "preinstall": "cd ./src && npm install",
     "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/.",
     "check": "flow status",
