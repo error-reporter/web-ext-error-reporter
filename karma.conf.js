@@ -64,6 +64,7 @@ module.exports = function(config) {
     preprocessors: {
     },
 
+    browserDisconnectTimeout: 5000,
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
