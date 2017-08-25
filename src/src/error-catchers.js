@@ -4,7 +4,7 @@ import Utils from './utils';
 
 const debug = Debug('weer:catcher');
 
-const errorEventToPlainObject = (errEv) => {
+const errorEventToPlainObject = (errorEvent) => {
 
   const plainObj = [
     'message',
@@ -12,18 +12,37 @@ const errorEventToPlainObject = (errEv) => {
     'lineno',
     'colno',
     'type',
+    'path',
   ].reduce((acc, prop) => {
 
-    acc[prop] = errEv[prop];
+    acc[prop] = errorEvent[prop];
     return acc;
 
   }, {});
+  const pathStr = plainObj.path.map((o) => {
 
-  if (errEv.error && typeof errEv === 'object') {
+    let res = '';
+    if (o.tagName) {
+      res += `<${o.tagName.toLowerCase()}`;
+      if (o.attributes) {
+        res += Array.from(o.attributes).map((atr) => ` ${atr.name}="${atr.value}"`).join('');
+      }
+      res += '>';
+    }
+    if (!res) {
+      res += `${o}`;
+    }
+    return res;
+
+  }).join(', ');
+
+  plainObj.path = `[${pathStr}]`;
+
+  if (errorEvent.error && typeof errorEvent === 'object') {
     plainObj.error =
-      Errio.toObject(errEv.error, { stack: true, private: true });
+      Errio.toObject(errorEvent.error, { stack: true, private: true });
   } else {
-    plainObj.error = errEv.error;
+    plainObj.error = errorEvent.error;
   }
   return plainObj;
 
@@ -53,10 +72,10 @@ export default {
       Utils.assert(nameForDebug !== 'BG', bgIsBg);
     }
 
-    const listener = (errEvent) => {
+    const listener = (errorEventent) => {
 
-      debug(nameForDebug, errEvent);
-      const plainObj = errorEventToPlainObject(errEvent);
+      debug(nameForDebug, errorEventent);
+      const plainObj = errorEventToPlainObject(errorEventent);
 
       const msg = {
         to: 'error-reporter',
