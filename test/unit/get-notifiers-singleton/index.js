@@ -10,9 +10,23 @@ describe('Weer.GetNotifiersSingleton', () => {
 
   describe('GetNotifiersSingleton', () => {
 
-    const getNoty = () =>
-      Weer.GetNotifiersSingleton({ sendReportsToEmail: 'homerjsimpson@example.com' });
+    const getNoty = (opts = {}) =>
+      Weer.GetNotifiersSingleton({
+        sendReports:{
+          toEmail: 'homerjsimpson@example.com',
+          ...opts,
+        }
+      });
     const noty = getNoty();
+
+    it('is creatable with constructor', () => {
+
+      const one = getNoty();
+      assert.isDefined(one);
+      const two = getNoty({ inLanguages: ['ru'] });
+      assert.isDefined(two);
+
+    });
 
     chrome.notifications.create.callsFake((id, ops, cb) => cb());
 
