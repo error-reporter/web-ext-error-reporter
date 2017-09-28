@@ -9,7 +9,7 @@ chrome.runtime.getBackgroundPage((bgWindow) =>
 
     };
 
-    throw new Error('PUPERR');
+    throw new Error('PUPERR THREW THIS');
 
   })
 );

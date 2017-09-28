@@ -5,7 +5,10 @@
 console.log('Extension started.');
 
 window.Weer.install({
-  sendReportsToEmail: 'your@email.com',
+  sendReports: {
+    toEmail: 'your@email.com',
+    inLanguages: ['ru', 'en'],
+  },
 });
 
 window.bar = function foo() {

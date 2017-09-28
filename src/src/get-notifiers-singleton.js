@@ -61,14 +61,18 @@ const ifPrefix = 'if-on-';
 const extName = chrome.runtime.getManifest().name;
 const extBuild = Versions.currentBuild;
 
-const defaultClickHandler = function defaultClickHandler(msg, report) {
+const defaultClickHandler = function defaultClickHandler(
+  {
+    toEmail = Utils.mandatory(),
+    reportLangs = Utils.mandatory(),
+  }, message, report) {
 
-  const toEmail = this.sendReportsToEmail;
   const json = JSON.stringify(report);
   const url = `${
-    'https://rebrand.ly/view-error/?title={{message}}&json={{json}}'
-      .replace('{{message}}', encodeURIComponent(msg))
+    'https://rebrand.ly/view-error/?title={{message}}&json={{json}}&reportLangs={{reportLangs}}'
+      .replace('{{message}}', encodeURIComponent(message))
       .replace('{{json}}', encodeURIComponent(json))
+      .replace('{{reportLangs}}', encodeURIComponent(reportLangs.join(',')))
   }#toEmail=${encodeURIComponent(toEmail)}`;
 
   chrome.tabs.create(
@@ -80,7 +84,10 @@ const defaultClickHandler = function defaultClickHandler(msg, report) {
 
 const createErrorNotifiers = (
   {
-    sendReportsToEmail = undefined,
+    sendReports: {
+      toEmail = undefined,
+      inLanguages = ['en'],
+    },
     onNotificationClick = defaultClickHandler,
     // Icons:
     extErrorIconUrl = 'https://rebrand.ly/ext-error',
@@ -91,13 +98,18 @@ const createErrorNotifiers = (
   let onNotyClick;
   {
     const ifDefault = onNotificationClick === defaultClickHandler;
-    const toEmail = sendReportsToEmail;
     Utils.assert(
-      ifDefault ? toEmail : true,
-      'Default click handler requires sendReportsToEmail config to be set.',
+      !ifDefault || (toEmail && inLanguages && inLanguages.length),
+      'Default click handler requires { sendReports: { toEmail: \'foo@example.com\', inLanguages: [\'en\'] } } config to be set.',
     );
     onNotyClick = ifDefault
-      ? onNotificationClick.bind({ sendReportsToEmail })
+      ? (...args) => onNotificationClick(
+        {
+          toEmail,
+          reportLangs: [...new Set(inLanguages)].map((lang) => lang.toLowerCase()),
+        },
+        ...args,
+      )
       : onNotificationClick;
   }
 
