@@ -17,7 +17,7 @@
     - [With Bundler](#with-bundler)
     - [Without Bundler](#without-bundler)
   - [Install and Use](#install-and-use)
-    - [One Rule to Know](#one-rule-to-know)
+    - [Catching Errors Without Weer](#catching-errors-without-weer)
     - [Install in Background Script](#install-in-background-script)
     - [Install in Non-Background Script](#install-in-non-background-script)
   - [Debugging](#debugging)
@@ -93,7 +93,7 @@ $ cat foo-extension/manifest.json
 
 ### Install and Use
 
-#### One Rule to Know
+#### Catching Errors Without Weer
 
 There is some mess in how you catch errors in a web-extension:
 
