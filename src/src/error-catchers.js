@@ -19,24 +19,26 @@ const errorEventToPlainObject = (errorEvent) => {
     return acc;
 
   }, {});
-  const pathStr = plainObj.path.map((o) => {
+  if (plainObj.path) {
+    const pathStr = plainObj.path.map((o) => {
 
-    let res = '';
-    if (o.tagName) {
-      res += `<${o.tagName.toLowerCase()}`;
-      if (o.attributes) {
-        res += Array.from(o.attributes).map((atr) => ` ${atr.name}="${atr.value}"`).join('');
+      let res = '';
+      if (o.tagName) {
+        res += `<${o.tagName.toLowerCase()}`;
+        if (o.attributes) {
+          res += Array.from(o.attributes).map((atr) => ` ${atr.name}="${atr.value}"`).join('');
+        }
+        res += '>';
       }
-      res += '>';
-    }
-    if (!res) {
-      res += `${o}`;
-    }
-    return res;
+      if (!res) {
+        res += `${o}`;
+      }
+      return res;
 
-  }).join(', ');
+    }).join(', ');
 
-  plainObj.path = `[${pathStr}]`;
+    plainObj.path = `[${pathStr}]`;
+  }
 
   if (errorEvent.error && typeof errorEvent === 'object') {
     plainObj.error =
