@@ -134,6 +134,8 @@ So if you want error catchers to work — your code must be wrapped in `setTimeo
 
 This behavior may be a bug and is discussed in https://crbug.com/357568.
 
+Now let's look how to catch errors with Weer.
+
 #### Install in Background Script
 
 ```js
