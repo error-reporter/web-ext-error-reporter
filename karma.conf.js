@@ -65,6 +65,11 @@ module.exports = function(config) {
     },
 
     browserDisconnectTimeout: 5000,
+    client: {
+      mocha: {
+        timeout: 6000, // default is 2000.
+      },
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
