@@ -8,11 +8,10 @@ describe('Weer.ErrorCatchers', () => {
     assert.isDefined(Weer.ErrorCatchers, 'Weer.ErrorCatchers is defined');
   });
 
-  it('exports installListenersOn', () => {
+  it('exports api', () => {
 
-    const install = Weer.ErrorCatchers.installListenersOn;
     assert.isDefined(
-      install,
+      Weer.ErrorCatchers.installListenersOn,
       'ErrorCatchers.installListenersOn is defined',
     );
 

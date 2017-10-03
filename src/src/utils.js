@@ -7,6 +7,8 @@
 3. Add utils for safer coding: `mandatory`, `throwIfError`.
 
 */
+import Errio from 'errio';
+
 const Utils = {
 
   mandatory() {
@@ -77,6 +79,57 @@ const Utils = {
     if (!value) {
       throw new Error(message || `Assertion failed, value: ${value}`);
     }
+
+  },
+
+  errorToPlainObject(error) {
+
+    return Errio.toObject(error, { stack: true, private: true });
+
+  },
+
+  errorEventToPlainObject(errorEvent) {
+
+    const plainObj = [
+      'message',
+      'filename',
+      'lineno',
+      'colno',
+      'type',
+      'path',
+    ].reduce((acc, prop) => {
+
+      acc[prop] = errorEvent[prop];
+      return acc;
+
+    }, {});
+    if (plainObj.path) {
+      const pathStr = plainObj.path.map((o) => {
+
+        let res = '';
+        if (o.tagName) {
+          res += `<${o.tagName.toLowerCase()}`;
+          if (o.attributes) {
+            res += Array.from(o.attributes).map((atr) => ` ${atr.name}="${atr.value}"`).join('');
+          }
+          res += '>';
+        }
+        if (!res) {
+          res += `${o}`;
+        }
+        return res;
+
+      }).join(', ');
+
+      plainObj.path = `[${pathStr}]`;
+    }
+
+    if (errorEvent.error && typeof errorEvent === 'object') {
+      plainObj.error = this.errorToPlainObject(errorEvent.error);
+    } else {
+      plainObj.error = errorEvent.error;
+    }
+    return plainObj;
 
   },
 
