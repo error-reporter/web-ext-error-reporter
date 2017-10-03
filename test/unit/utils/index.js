@@ -183,4 +183,17 @@ describe('Weer.Utils', () => {
 
   });
 
+  it('provides error/errorEvent to plain object converters', () => {
+
+    assert.isDefined(
+      Utils.errorToPlainObject,
+      'Utils.errorToPlainObject is defined',
+    );
+    assert.isDefined(
+      Utils.errorEventToPlainObject,
+      'Utils.errorEventToPlainObject is defined',
+    );
+
+  });
+
 });
