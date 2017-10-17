@@ -27,10 +27,10 @@ export default {
       Utils.assert(nameForDebug !== 'BG', bgIsBg);
     }
 
-    const listener = (errorEventent) => {
+    const listener = (errorEvent) => {
 
-      debug(nameForDebug, errorEventent);
-      const plainObj = Utils.errorEventToPlainObject(errorEventent);
+      debug(nameForDebug, errorEvent);
+      const plainObj = Utils.errorEventToPlainObject(errorEvent);
 
       const msg = {
         to: 'error-reporter',
