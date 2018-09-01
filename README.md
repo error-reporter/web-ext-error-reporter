@@ -141,7 +141,10 @@ Now let's look how to catch errors with Weer.
 ```js
 Weer.install({
   // Required:
-  sendReportsToEmail: 'homerjsimpson@example.com', // or onNotificationClick: (errMessage, report) => {...}
+  sendReports: {
+    toEmail: 'homerjsimpson@example.com',
+    inLanguages: ['en'],
+  },
   // Optional:
   extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
   pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
