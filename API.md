@@ -111,7 +111,8 @@ Installs error and unhandled rejections catchers on `hostWindow` object, in case
 {
  sendReports: {
     toEmail = 'homerjsimpson@example.com',
-    // In what language to display example for the error reporting form.
+    // In what language to display a template for the error reporting form.
+    // Use only those languages that your support team may understand.
     inLanguages = ['en'],
   },
   onNotificationClick = defaultClickHandler,
