@@ -12,8 +12,8 @@
 
 - [Why](#why)
   - [Catching Errors Without Weer](#catching-errors-without-weer)
-  - [Setup in Background Script](#setup-in-background-script)
-  - [Setup in Non-Background Script](#setup-in-non-background-script)
+  - [Weer in Background Script](#weer-in-background-script)
+  - [Weer in Non-Background Script](#weer-in-non-background-script)
 - [Install](#install)
 - [Usage](#usage)
   - [Formats](#formats)
@@ -75,7 +75,7 @@ This behavior may be a bug and is discussed in https://crbug.com/357568.
 
 Now let's look how to catch errors with Weer.
 
-## Setup in Background Script
+## Weer in Background Script
 
 ```js
 Weer.install({
@@ -93,7 +93,7 @@ Weer.install({
 throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
 ```
 
-## Setup in Non-Background Script
+## Weer in Non-Background Script
 
 ```js
 // In popup, settings and other pages.
