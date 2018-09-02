@@ -1,5 +1,7 @@
 # Weer API Documentation
 
+This file describes Weer API, for introduction into Weer see [GitHub repository](https://github.com/error-reporter/weer).
+
 ## `Weer.Utils`
 
 File: `weer-repo/src/src/utils.js`  
