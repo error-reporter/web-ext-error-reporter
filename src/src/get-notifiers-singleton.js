@@ -69,7 +69,7 @@ const defaultClickHandler = function defaultClickHandler(
 
   const json = JSON.stringify(report);
   const url = `${
-    'https://rebrand.ly/view-error/?title={{message}}&json={{json}}&reportLangs={{reportLangs}}'
+    'https://error-reporter.github.io/v0/error/view/?title={{message}}&json={{json}}&reportLangs={{reportLangs}}'
       .replace('{{message}}', encodeURIComponent(message))
       .replace('{{json}}', encodeURIComponent(json))
       .replace('{{reportLangs}}', encodeURIComponent(reportLangs.join(',')))
@@ -90,8 +90,8 @@ const createErrorNotifiers = (
     },
     onNotificationClick = defaultClickHandler,
     // Icons:
-    extErrorIconUrl = 'https://rebrand.ly/ext-error',
-    pacErrorIconUrl = 'https://rebrand.ly/pac-error',
+    extErrorIconUrl = 'https://error-reporter.github.io/v0/icons/ext-error-128.png',
+    pacErrorIconUrl = 'https://error-reporter.github.io/v0/icons/pac-error-128.png',
     maskIconUrl = false,
   } = {}) => {
 
