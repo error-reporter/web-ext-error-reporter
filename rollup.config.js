@@ -7,14 +7,13 @@ const inSrc = (relPath) => Path.join(srcPath, relPath);
 
 const plugins = [
   NodeResolve({
-    jsnext: true,
-    browser: true
+    browser: true,
   }),
   CommonJs({
     include: [
-      './src/node_modules/**'
-    ]
-  })
+      './src/node_modules/**',
+    ],
+  }),
 ];
 
 const absAndRel = (filePath) => [
@@ -26,84 +25,88 @@ const absAndRel = (filePath) => [
   // Absolute. Required.
 
   Path.resolve(
-    inSrc(filePath)
-  )
+    inSrc(filePath),
+  ),
 ];
 
 const external = [
   ...absAndRel('utils'),
   '../utils',
-  'debug'
+  'debug',
 ];
 
 const externalAll = [
   ...external,
   ...absAndRel('error-catchers'),
-  ...absAndRel('get-notifiers-singleton')
+  ...absAndRel('get-notifiers-singleton'),
 ];
 
-const utilsFullPath =  Path.resolve(inSrc('utils'));
+const utilsFullPath = Path.resolve(inSrc('utils'));
 
 const globals = {
-  [utilsFullPath]: 'Weer.Utils'
+  [utilsFullPath]: 'Weer.Utils',
 };
 
 export default [
   {
     plugins,
-    entry: inSrc('utils.js'),
-    targets: [
-      { dest: './dist/cjs/utils.js', format: 'cjs' },
-      { dest: './dist/esm/utils.js', format: 'es' },
-      { dest: './dist/umd/utils.js', format: 'umd',
-        moduleName: 'Weer.Utils',
-        globals
-      }
-    ]
+    input: inSrc('utils.js'),
+    output: [
+      { file: './dist/cjs/utils.js', format: 'cjs' },
+      { file: './dist/esm/utils.js', format: 'es' },
+      { file: './dist/umd/utils.js',
+        format: 'umd',
+        name: 'Weer.Utils',
+        globals,
+      },
+    ],
   },
   {
     plugins,
     external,
-    entry: inSrc('error-catchers.js'),
-    targets: [
-      { dest: './dist/cjs/error-catchers.js', format: 'cjs' },
-      { dest: './dist/esm/error-catchers.js', format: 'es' },
-      { dest: './dist/umd/error-catchers.js', format: 'umd',
-        moduleName: 'Weer.ErrorCatchers',
-        globals
-      }
-    ]
+    input: inSrc('error-catchers.js'),
+    output: [
+      { file: './dist/cjs/error-catchers.js', format: 'cjs' },
+      { file: './dist/esm/error-catchers.js', format: 'es' },
+      { file: './dist/umd/error-catchers.js',
+        format: 'umd',
+        name: 'Weer.ErrorCatchers',
+        globals,
+      },
+    ],
   },
   {
     plugins,
     external,
-    entry: inSrc('get-notifiers-singleton.js'),
-    targets: [
-      { dest: './dist/cjs/get-notifiers-singleton.js', format: 'cjs' },
-      { dest: './dist/esm/get-notifiers-singleton.js', format: 'es' },
-      { dest: './dist/umd/get-notifiers-singleton.js', format: 'umd',
-        moduleName: 'Weer.GetNotifiersSingleton',
-        globals
-      }
-    ]
+    input: inSrc('get-notifiers-singleton.js'),
+    output: [
+      { file: './dist/cjs/get-notifiers-singleton.js', format: 'cjs' },
+      { file: './dist/esm/get-notifiers-singleton.js', format: 'es' },
+      { file: './dist/umd/get-notifiers-singleton.js',
+        format: 'umd',
+        name: 'Weer.GetNotifiersSingleton',
+        globals,
+      },
+    ],
   },
   {
     plugins,
     external: externalAll,
-    entry: inSrc('index.js'),
-    targets: [
-      { dest: './dist/cjs/index.js', format: 'cjs' },
-      { dest: './dist/esm/index.js', format: 'es' }
-    ]
+    input: inSrc('index.js'),
+    output: [
+      { file: './dist/cjs/index.js', format: 'cjs' },
+      { file: './dist/esm/index.js', format: 'es' },
+    ],
   },
   {
     plugins,
-    entry: inSrc('index.js'),
-    targets: [
-      { dest: './dist/umd/index.js', format: 'umd',
-        moduleName: 'Weer',
-        globals
-      }
-    ]
-  }
+    input: inSrc('index.js'),
+    output: [
+      { file: './dist/umd/index.js',
+        format: 'umd',
+        name: 'Weer',
+        globals,
+      },
+    ],
+  },
 ];
