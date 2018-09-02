@@ -1,6 +1,6 @@
 # Weer API Documentation
 
-This file describes Weer API, for introduction into Weer and for a more fresh API see [GitHub repository](https://github.com/error-reporter/weer).
+This file describes Weer API, for introduction into Weer and for the most fresh API see [GitHub repository](https://github.com/error-reporter/weer).
 
 ## `Weer.Utils`
 
