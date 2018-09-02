@@ -10,7 +10,7 @@
     "lint-root": "eslint ./*.js --ignore-pattern rollup.config.js",
     "lint": "npm run lint-src && npm run lint-examples && npm run lint-root",
     "preinstall": "cd ./src && npm install",
-    "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/.",
+    "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/. && shx cp ./API.md ./dist/README.md",
     "start": "npm run build",
     "__check": "flow status",
     "__start-flow": "flow server",
