@@ -226,7 +226,7 @@ Firefox: yes, but notifications are not sticky, unhandled proimise rejections ar
 
 ## API
 
-See [wiki](https://github.com/error-reporter/weer/wiki/API-Documentation).
+See [API.md](./API.md).
 
 ## Maintainer
 
