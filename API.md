@@ -109,7 +109,11 @@ Installs error and unhandled rejections catchers on `hostWindow` object, in case
 
 ```js
 {
-  sendReportsToEmail = undefined,
+ sendReports: {
+    toEmail = 'homerjsimpson@example.com',
+    // In what language to display example for the error reporting form.
+    inLanguages = ['en'],
+  },
   onNotificationClick = defaultClickHandler,
   // Icons:
   extErrorIconUrl = 'https://rebrand.ly/ext-error',
@@ -153,3 +157,6 @@ noty.isOn('pac-error');
 // To get a Map of `{ error-type: "description" }`:
 noty.getErrorTypeToLabelMap();
 ```
+## Weer.install(configs)
+
+`configs` are passed to `Weer.GetNotifiersSingleton`, see above.
