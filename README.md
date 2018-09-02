@@ -10,16 +10,16 @@
 
 ## Table of Contents
 
+- [Why](#why)
+  - [Catching Errors Without Weer](#catching-errors-without-weer)
+  - [Setup in Background Script](#setup-in-background-script)
+  - [Setup in Non-Background Script](#setup-in-non-background-script)
 - [Install](#install)
 - [Usage](#usage)
   - [Formats](#formats)
   - [Import](#import)
     - [With Bundler](#with-bundler)
     - [Without Bundler](#without-bundler)
-  - [Install and Use](#install-and-use)
-    - [Catching Errors Without Weer](#catching-errors-without-weer)
-    - [Install in Background Script](#install-in-background-script)
-    - [Install in Non-Background Script](#install-in-non-background-script)
   - [Debugging](#debugging)
   - [Examples of Setups](#examples-of-setups)
   - [Demo](#demo)
@@ -29,6 +29,109 @@
 - [Contribute](#contribute)
 - [Credits](#credits)
 - [License](#license)
+
+# Why
+
+## Catching Errors Without Weer
+
+There is some mess in how you catch errors in a web-extension:
+
+```js
+'use strict';
+/*
+  bg-window — background window, main window of a web-extension.
+  non-bg-windows — popup, settings and other pages windows of a web-extension, that are not bg-window.
+*/
+
+
+window.addEventListener('error', (errorEvent) => {/* ... */});
+
+// Case 1
+throw new Error('Root (caught only in bg-window, not caught in non-bg windows');
+
+// Case 2
+setTimeout(
+  () => { throw new Error('Timeouted root (caught by handlers'); },
+  0,
+);
+
+// Case 3
+chrome.tabs.getCurrent(() => {
+
+  throw new Error('Chrome API callback (not caught by handlers)');
+
+});
+
+// Case 4
+chrome.tabs.getCurrent(() => setTimeout(() => {
+
+  throw new Error('Timeouted Chrome API callback (caught by handlers)');
+
+}, 0));
+```
+So if you want error catchers to work — your code must be wrapped in `setTimeout`.
+
+This behavior may be a bug and is discussed in https://crbug.com/357568.
+
+Now let's look how to catch errors with Weer.
+
+## Setup in Background Script
+
+```js
+Weer.install({
+  // Required:
+  sendReports: {
+    toEmail: 'homerjsimpson@example.com',
+    inLanguages: ['en'],
+  },
+  // Optional:
+  extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
+  pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
+  maskIconUrl: 'https://example.com/img/mask-128.png',
+});
+
+throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
+```
+
+## Setup in Non-Background Script
+
+```js
+// In popup, settings and other pages.
+'use strict';
+
+chrome.runtime.getBackgroundPage((bgWindow) =>
+  bgWindow.Weer.ErrorCatchers.installListenersOn({ hostWindow: window, nameForDebug: 'PUP' }, () => {
+
+    // Put all your code inside this arrow body (it is timeouted).
+
+    // Case 1:
+    throw new Error('PUPERR (caught by Weer)');
+
+    // Case 2:
+    document.getElementById('btn').onclick = () => {
+
+      throw new Error('ONCLCK! (caught by Weer)');
+
+    };
+
+    // Case 3:
+    chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
+
+      throw new Error('Timeouted Chrome API callback (caught by Weer)');
+
+    }));
+
+  })
+);
+
+// Case 4:
+chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
+
+  throw new Error('Timeouted Chrome API callback (caught by Weer)');
+
+}));
+
+```
 
 ## Install
 
@@ -89,109 +192,6 @@ $ cat foo-extension/manifest.json
   ...
 ],
 ...
-```
-
-### Install and Use
-
-#### Catching Errors Without Weer
-
-There is some mess in how you catch errors in a web-extension:
-
-```js
-'use strict';
-/*
-  bg-window — background window, main window of a web-extension.
-  non-bg-windows — popup, settings and other pages windows of a web-extension, that are not bg-window.
-*/
-
-
-window.addEventListener('error', (errorEvent) => {/* ... */});
-
-// Case 1
-throw new Error('Root (caught only in bg-window, not caught in non-bg windows');
-
-// Case 2
-setTimeout(
-  () => { throw new Error('Timeouted root (caught by handlers'); },
-  0,
-);
-
-// Case 3
-chrome.tabs.getCurrent(() => {
-
-  throw new Error('Chrome API callback (not caught by handlers)');
-
-});
-
-// Case 4
-chrome.tabs.getCurrent(() => setTimeout(() => {
-
-  throw new Error('Timeouted Chrome API callback (caught by handlers)');
-
-}, 0));
-```
-So if you want error catchers to work — your code must be wrapped in `setTimeout`.
-
-This behavior may be a bug and is discussed in https://crbug.com/357568.
-
-Now let's look how to catch errors with Weer.
-
-#### Install in Background Script
-
-```js
-Weer.install({
-  // Required:
-  sendReports: {
-    toEmail: 'homerjsimpson@example.com',
-    inLanguages: ['en'],
-  },
-  // Optional:
-  extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
-  pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
-  maskIconUrl: 'https://example.com/img/mask-128.png',
-});
-
-throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
-```
-
-#### Install in Non-Background Script
-
-```js
-// In popup, settings and other pages.
-'use strict';
-
-chrome.runtime.getBackgroundPage((bgWindow) =>
-  bgWindow.Weer.ErrorCatchers.installListenersOn({ hostWindow: window, nameForDebug: 'PUP' }, () => {
-
-    // Put all your code inside this arrow body (it is timeouted).
-
-    // Case 1:
-    throw new Error('PUPERR (caught by Weer)');
-
-    // Case 2:
-    document.getElementById('btn').onclick = () => {
-
-      throw new Error('ONCLCK! (caught by Weer)');
-
-    };
-
-    // Case 3:
-    chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
-
-      throw new Error('Timeouted Chrome API callback (caught by Weer)');
-
-    }));
-
-  })
-);
-
-// Case 4:
-chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
-
-  throw new Error('Timeouted Chrome API callback (caught by Weer)');
-
-}));
-
 ```
 
 ### Debugging
