@@ -146,10 +146,9 @@ Report looks like:
 }
 ```
 
-### Methods
+### Return Type
 
 ```js
-
 const noty = Weer.GetNotifiersSingleton(configs);
 noty.switch('off'); // Switches off notifications.
 noty.switch('pac-error'); // Switches off notifications for pac-errors.
