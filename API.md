@@ -154,7 +154,7 @@ Report looks like:
 ```js
 const noty = Weer.GetNotifiersSingleton(configs);
 noty.switch('off'); // Switches off notifications.
-noty.switch('pac-error'); // Switches off notifications for pac-errors.
+noty.switch('off', 'pac-error'); // Switches off notifications for pac-errors.
 noty.isOn('pac-error');
 // To get a Map of `{ error-type: "description" }`:
 noty.getErrorTypeToLabelMap();
