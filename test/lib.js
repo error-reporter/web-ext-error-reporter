@@ -4,17 +4,13 @@ if (window.debug) {
   window.debug.enable('weer:*');
 }
 
-chrome.runtime.getManifest.callsFake(function fakeFn() {
+chrome.runtime.getManifest.callsFake(() => ({ version: '0.0.0.0' }));
 
-  return { version: '0.0.0.0' };
-
-});
-
-const catchGlobal = (errHandler) => {
+window.catchGlobal = (errHandler) => {
 
   const originalOnError = window.onerror;
   expect(originalOnError).to.be.ok;
-  window.onerror = (ev) => {};
+  window.onerror = () => {};
   window.addEventListener('error', (errEvent) => {
 
     window.onerror = originalOnError;
