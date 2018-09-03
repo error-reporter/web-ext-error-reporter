@@ -9,11 +9,13 @@
   "main": "./dist/cjs/",
   "module": "./dist/esm/",
   "scripts": {
-    "lint-src": "eslint ./src/**/*.js --ignore-pattern vendor",
-    "lint-examples": "eslint ./examples --ignore-pattern vendor --ignore-pattern node_modules --ignore-pattern dist",
+    "lint-src": "eslint ./src/**/*.js",
+    "lint-examples": "eslint ./examples --ignore-pattern node_modules --ignore-pattern dist",
     "lint-root": "eslint ./*.js",
     "lint": "npm run lint-src && npm run lint-examples && npm run lint-root",
     "preinstall": "cd ./src && npm install",
+    "postinstall": "npm run pack-debug",
+    "pack-debug": "cd ./node_modules/debug && make browser && cd - && cp ./node_modules/debug/dist/debug.js ./vendor/optional-debug.js",
     "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/. && shx cp ./API.md ./dist/README.md",
     "start": "npm run build",
     "__check": "flow status",
@@ -49,5 +51,7 @@
     "sinon": "^6.1.5",
     "sinon-chrome": "^2.3.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "debug": "^3.1.0"
+  }
 }

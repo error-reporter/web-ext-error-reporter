@@ -8,21 +8,19 @@
   },
   "scripts": {
     "clean": "shx rm -rf dist && mkdir dist",
-    "pack-vendor": "mkdir ./dist/vendor && npm run pack-debug",
     "copy-ext": "shx cp ./src/manifest.json ./dist/. && shx cp -r ./src/pages ./dist/.",
     "dummy-weer": "shx touch ./dist/vendor/weer.js",
-    "prepare": "npm run clean && npm run pack-vendor && npm run copy-ext && npm run dummy-weer",
+    "prepare": "npm run clean && npm run copy-vendor && npm run copy-ext && npm run dummy-weer",
     "copy-weer": "shx cp -r ../dist/umd/index.js ./dist/vendor/weer.js",
     "without-bundlers": "npm run prepare && npm run copy-weer && shx cp ./src/without-bundlers/index.js ./dist/.",
     "webpack": "npm run prepare && webpack --mode production ./src/esm-for-bundlers/index.js -o ./dist/index.js",
     "rollup": "npm run prepare && rollup -c",
-    "pack-debug": "cd ./node_modules/debug && make browser && cd - && cp ./node_modules/debug/dist/debug.js ./dist/vendor/optional-debug.js",
+    "copy-vendor": "shx cp -r ../vendor ./dist/vendor",
     "start": "npm run without-bundlers"
   },
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPL-3.0+",
   "devDependencies": {
-    "debug": "^3.1.0",
     "rollup": "^0.65.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "shx": "^0.3.2",
