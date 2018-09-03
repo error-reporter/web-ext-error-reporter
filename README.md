@@ -21,7 +21,7 @@
     - [With Bundler](#with-bundler)
     - [Without Bundler](#without-bundler)
   - [Setup](#setup)
-    - [Permissions in manifest.json](#permissions-in-manifest-json)
+    - [Permissions in manifest.json](#permissions-in-manifestjson)
     - [BG Window](#bg-window)
   - [Debugging](#debugging)
   - [Examples of Setups](#examples-of-setups)
