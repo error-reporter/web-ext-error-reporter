@@ -129,14 +129,14 @@ Report looks like:
 ```js
 {
   payload: {
+    filename: "chrome-extension://mddbgiefhigdgkeggceilkaoamkbnajl/pages/popup/dist/bundle.js",  
     colno: 13,
+    lineno: 373,
     error: {
       message: "I'm a type error!",
       name: "TypeError",
       stack: "...",
     },
-    filename: "chrome-extension://mddbgiefhigdgkeggceilkaoamkbnajl/pages/popup/dist/bundle.js",
-    lineno: 373,
     message: "Uncaught TypeError: I'm a type error!",
     path: "[[object Window]]",
     type: "error",
