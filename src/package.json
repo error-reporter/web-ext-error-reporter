@@ -15,9 +15,6 @@
     "error",
     "report"
   ],
-  "devDependencies": {
-    "debug": "^3.1.0"
-  },
   "dependencies": {
     "errio": "^1.2.2"
   }
