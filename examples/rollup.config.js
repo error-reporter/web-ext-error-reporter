@@ -10,12 +10,12 @@ const plugins = [
 export default [
   {
     plugins,
-    entry: './src/esm-for-bundlers/index.js',
-    targets: [
+    input: './src/esm-for-bundlers/index.js',
+    output: [
       {
-        dest: './dist/index.js',
+        file: './dist/index.js',
         format: 'umd',
-        moduleName: 'Weer',
+        name: 'Weer',
       },
     ],
   },
