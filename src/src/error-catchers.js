@@ -14,13 +14,13 @@ export default {
   } = {}, cb) {
 
     const ifInBg = hostWindow === window;
-    const bgIsBg = `Background window can't have name other than "${bgName}". ` +
-      `Default value is "${bgName}".`;
+    const bgIsBg = `Background window can't have name other than "${bgName}". `
+      + `Default value is "${bgName}".`;
     if (ifInBg) {
       Utils.assert(
         typeof handleErrorMessage === 'function',
-        'Messaging from BG window to itself is not allowed,' +
-        ' provide message handler for such cases.',
+        'Messaging from BG window to itself is not allowed,'
+        + ' provide message handler for such cases.',
       );
       Utils.assert(nameForDebug === 'BG', bgIsBg);
     } else {

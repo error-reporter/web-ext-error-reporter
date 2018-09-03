@@ -22,5 +22,6 @@ module.exports = {
     'padded-blocks': 'off', // (arg) => {\n\n_body_\n\n}
     'no-plusplus': 'off',
     'consistent-return': 'off',
+    'implicit-arrow-linebreak': 'off',
   },
 };

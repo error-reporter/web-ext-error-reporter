@@ -8,6 +8,7 @@ const allowedTargets = [
   'get-notifiers-singleton',
 ];
 if (!allowedTargets.includes(testTarget)) {
+  // eslint-disable-next-line
   console.error(
     'Please, provide TEST_TARGET environment variable. Allowed targets:',
     `${allowedTargets.join(', ')}.`,
@@ -15,14 +16,14 @@ if (!allowedTargets.includes(testTarget)) {
   process.exit(1);
 }
 
+
 const getUmd = (target) => `./dist/umd/${target}.js`;
 
 const deps = ['utils', 'index'].includes(testTarget)
   ? [/* No deps. */]
   : [
     getUmd('utils'),
-  ]
-;
+  ];
 
 const targetedFiles = [
   ...deps,

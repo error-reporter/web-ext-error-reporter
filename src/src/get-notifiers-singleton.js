@@ -24,8 +24,8 @@ const loadIconAsBlobUrlAsync = function loadIconAsBlobUrlAsync(iconUrl = Utils.m
   return new Promise((resolve) => {
 
     const dumpCanvas = () =>
-      canvas.toBlob((blob) =>
-        resolve(URL.createObjectURL(blob)),
+      canvas.toBlob(
+        (blob) => resolve(URL.createObjectURL(blob)),
       );
 
     img.onload = () => {
@@ -65,7 +65,10 @@ const defaultClickHandler = function defaultClickHandler(
   {
     toEmail = Utils.mandatory(),
     reportLangs = Utils.mandatory(),
-  }, message, report) {
+  },
+  message,
+  report,
+) {
 
   const json = JSON.stringify(report);
   const url = `${
@@ -93,7 +96,8 @@ const createErrorNotifiers = (
     extErrorIconUrl = 'https://error-reporter.github.io/v0/icons/ext-error-128.png',
     pacErrorIconUrl = 'https://error-reporter.github.io/v0/icons/pac-error-128.png',
     maskIconUrl = false,
-  } = {}) => {
+  } = {},
+) => {
 
   let onNotyClick;
   {
@@ -103,13 +107,16 @@ const createErrorNotifiers = (
       'Default click handler requires { sendReports: { toEmail: \'foo@example.com\', inLanguages: [\'en\'] } } config to be set.',
     );
     onNotyClick = ifDefault
-      ? (...args) => onNotificationClick(
-        {
-          toEmail,
-          reportLangs: [...new Set(inLanguages)].map((lang) => lang.toLowerCase()),
-        },
-        ...args,
-      )
+      ? (...args) =>
+        onNotificationClick(
+          {
+            toEmail,
+            reportLangs: [...new Set(inLanguages)].map(
+              (lang) => lang.toLowerCase(),
+            ),
+          },
+          ...args,
+        )
       : onNotificationClick;
   }
 
@@ -136,8 +143,7 @@ const createErrorNotifiers = (
         platform: navigator.platform,
       });
       const err = payload.error || payload;
-      const msg =
-        (err && err.message) || 'I Found a Bug';
+      const msg = (err && err.message) || 'I Found a Bug';
 
       onNotyClick(msg, report);
 
@@ -190,14 +196,15 @@ const createErrorNotifiers = (
         });
       }
 
-      return new Promise((resolve) =>
-        chrome.notifications.create(
-          `${notyPrefix}${errorType}`,
-          opts,
-          () => resolve(true),
-        ),
-      );
+      return new Promise(
+        (resolve) =>
 
+          chrome.notifications.create(
+            `${notyPrefix}${errorType}`,
+            opts,
+            () => resolve(true),
+          ),
+      );
     },
 
     install() {
@@ -256,10 +263,11 @@ const createErrorNotifiers = (
             return;
           }
           // TOOD: add "view pac script at this line" button.
-          errorNotifiers.mayNotify('pac-error', 'PAC Error!',
+          errorNotifiers.mayNotify(
+            'pac-error',
+            'PAC Error!',
             `${details.error}\n${details.details}`,
           );
-
         }));
       }
 
@@ -304,10 +312,12 @@ export default function GetNotifiersSingleton(configs) {
       const eventNames = eventName
         ? [eventName]
         : [...this.getErrorTypeToLabelMap().keys()];
-      eventNames.forEach((name) =>
-        notifiers.state(ifPrefix + name, onOffStr === 'on' ? 'on' : 'off'),
+      eventNames.forEach(
+        (name) => notifiers.state(
+          ifPrefix + name,
+          onOffStr === 'on' ? 'on' : 'off',
+        ),
       );
-
     },
 
     isOn(eventName) {
