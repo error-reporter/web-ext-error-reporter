@@ -37,7 +37,7 @@
 There is some mess in how you catch errors in a web-extension:
 
 ```js
-'use strict';
+'use strict'; // Only if you don't use ES6 modules.
 /*
   bg-window — background window, main window of a web-extension.
   non-bg-windows — popup, settings and other pages windows of a web-extension, that are not bg-window.
@@ -77,6 +77,7 @@ Now let's look how to catch errors with Weer.
 ## Weer in a Background Script
 
 ```js
+'use strict'; // Only if you don't use ES6 modules.
 // Import and setup Weer here, see corresponding paragraphs below.
 
 throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
@@ -86,7 +87,7 @@ throw new Error('This is caught by Weer, notification is shown, opens error repo
 
 ```js
 // In popup, settings and other pages.
-'use strict';
+'use strict'; // Only if you don't use ES6 modules.
 
 chrome.runtime.getBackgroundPage((bgWindow) =>
   bgWindow.Weer.ErrorCatchers.installListenersOn({ hostWindow: window, nameForDebug: 'PUP' }, () => {
