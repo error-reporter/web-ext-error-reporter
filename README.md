@@ -239,8 +239,8 @@ ls dist <- Load as unpacked extension and play (tested on Chrome).
 
 ## Supported Browsers
 
-Chrome: yes  
-Firefox: yes, but notifications are not sticky, unhandled proimise rejections are [never] caught.
+Chrome: yes.  
+Firefox: yes, but notifications are not sticky, unhandled proimise rejections are [never] caught, clicking notifications [sometimes doesn't work](https://bugzilla.mozilla.org/show_bug.cgi?id=1488247).
 
 [never]: https://developer.mozilla.org/en-US/docs/Web/Events/unhandledrejection#Browser_compatibility
 
