@@ -20,6 +20,9 @@
   - [Import](#import)
     - [With Bundler](#with-bundler)
     - [Without Bundler](#without-bundler)
+  - [Setup](#setup)
+    - [Permissions in manifest.json](#permissions-in-manifest-json)
+    - [BG Window](#bg-window)
   - [Debugging](#debugging)
   - [Examples of Setups](#examples-of-setups)
   - [Demo](#demo)
@@ -120,7 +123,6 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
   throw new Error('Timeouted Chrome API callback (caught by Weer)');
 
 }));
-
 ```
 
 ## Install
@@ -184,6 +186,17 @@ $ cat foo-extension/manifest.json
 ```
 
 ### Setup
+
+#### Permissions in manifest.json
+
+```json
+"permissions": [
+  "notifications",
+  ...
+],
+```
+
+#### BG Window
 
 ```js
 // Import Weer somehow.
