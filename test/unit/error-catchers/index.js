@@ -56,7 +56,7 @@ describe('Weer.ErrorCatchers', () => {
       // Non-bg window as args.
       const fakeWin = newFakeWindow();
 
-      fakeWin.addEventListener.callsFake(function fakeFn(type, handler) {
+      fakeWin.addEventListener.callsFake((type, handler) => {
 
         if (type === 'error') {
           expect(fakeWin.chrome.runtime.sendMessage.callCount).to.not.be.ok;
@@ -94,7 +94,7 @@ describe('Weer.ErrorCatchers', () => {
       window.removeEventListener = sinon.stub();
       const handleErrorMessage = sinon.spy();
 
-      window.addEventListener.callsFake(function fakeFn(type, handler) {
+      window.addEventListener.callsFake((type, handler) => {
 
         if (type === 'error') {
           expect(window.chrome.runtime.sendMessage.callCount).to.not.be.ok;
@@ -165,7 +165,7 @@ describe('Weer.ErrorCatchers', () => {
           done();
 
         });
-        Promise.resolve().then( () => Promise.reject(reason) );
+        Promise.resolve().then(() => Promise.reject(reason));
 
       });
     }

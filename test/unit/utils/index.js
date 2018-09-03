@@ -7,13 +7,14 @@ describe('Weer.Utils', () => {
     assert.isDefined(Weer.Utils, 'Weer.Utils is defined');
   });
 
-  const Utils = Weer.Utils;
+  const { Utils } = Weer;
 
   it('provides `mandatory`', () => {
 
     assert.isDefined(Utils.mandatory, 'Utils.mandatory is defined');
     expect(Utils.mandatory, '`mandatory` throws TypeError when called').to.throw(TypeError);
 
+    // eslint-disable-next-line
     const foo = function foo(one, two = Utils.mandatory()) {};
     const wrapper = () =>
       foo('one');
@@ -40,13 +41,13 @@ describe('Weer.Utils', () => {
   const unsetLastError = () => {
     expect(chrome.runtime.lastError, 'can\'t clear already cleared lastError').to.exist;
     chrome.runtime.lastError = undefined;
-  }
+  };
 
   it('self test of (un)setLastError', () => {
 
     const msg = 'SOME MSG';
     const err = new TypeError(msg);
-    setLastError(err)
+    setLastError(err);
     expect(chrome.runtime.lastError.message, 'lastError is assignable').to.equal(msg);
 
     unsetLastError(err);
@@ -62,7 +63,7 @@ describe('Weer.Utils', () => {
     const msg = 'CHECK ME!';
     const err = new TypeError(msg);
 
-    setLastError(err)
+    setLastError(err);
 
     expect(Utils.checkChromeError().message, 'returns error with message on error').to.equal(msg);
     expect(Utils.checkChromeError().stack, 'returns error with stack on error').to.not.be.empty;
@@ -102,8 +103,7 @@ describe('Weer.Utils', () => {
 
     const check = (passedErr) => {
 
-      let flag = 'off';
-      let resolver = {};
+      const resolver = {};
       const p1 = new Promise((resolve) => { resolver.resolve = resolve; });
 
       const newFun = Utils.chromified((err, ...args) => { resolver.resolve([err, ...args]); });
@@ -145,8 +145,7 @@ describe('Weer.Utils', () => {
     const err = new EvalError('foo');
     const nums = ['one', 'two', 'three'];
     setLastError(err);
-    let resOne;
-    resOne = newFun(...nums);
+    const resOne = newFun(...nums);
     expect(resOne, 'new function returns nothing').to.be.undefined;
 
     catchGlobal((thrown) => {
@@ -157,7 +156,8 @@ describe('Weer.Utils', () => {
       unsetLastError();
       const resTwo = newFun(...nums);
       expect(resTwo, 'new function returns nothing (second)').to.be.undefined;
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
           expect(flag, 'new function is executed if no lastError').to.eql(nums);
           done();
