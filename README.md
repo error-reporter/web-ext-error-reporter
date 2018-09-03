@@ -12,8 +12,8 @@
 
 - [Why](#why)
   - [Catching Errors Without Weer](#catching-errors-without-weer)
-  - [Weer in Background Script](#weer-in-background-script)
-  - [Weer in Non-Background Script](#weer-in-non-background-script)
+  - [Weer in a Background Script](#weer-in-a-background-script)
+  - [Weer in a Non-Background Script](#weer-in-a-non-background-script)
 - [Install](#install)
 - [Usage](#usage)
   - [Formats](#formats)
@@ -42,7 +42,6 @@ There is some mess in how you catch errors in a web-extension:
   bg-window — background window, main window of a web-extension.
   non-bg-windows — popup, settings and other pages windows of a web-extension, that are not bg-window.
 */
-
 
 window.addEventListener('error', (errorEvent) => {/* ... */});
 
@@ -75,25 +74,15 @@ This behavior may be a bug and is discussed in https://crbug.com/357568.
 
 Now let's look how to catch errors with Weer.
 
-## Weer in Background Script
+## Weer in a Background Script
 
 ```js
-Weer.install({
-  // Required:
-  sendReports: {
-    toEmail: 'homerjsimpson@example.com',
-    inLanguages: ['en'],
-  },
-  // Optional:
-  extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
-  pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
-  maskIconUrl: 'https://example.com/img/mask-128.png',
-});
+// Import and setup Weer here, see corresponding paragraphs below.
 
 throw new Error('This is caught by Weer, notification is shown, opens error reporter on click');
 ```
 
-## Weer in Non-Background Script
+## Weer in a Non-Background Script
 
 ```js
 // In popup, settings and other pages.
@@ -169,7 +158,6 @@ For webpack, rollup, etc.
 
 ```js
 import Weer from 'weer';
-window.Weer = Weer; // For usage from non-bg windows (popup, settings, etc).
 ```
 
 If you need only a part of the API:
@@ -192,6 +180,25 @@ $ cat foo-extension/manifest.json
   ...
 ],
 ...
+```
+
+### Setup
+
+```js
+// Import Weer somehow.
+window.Weer = Weer; // Expose for non-bg windows (popup, settings, etc.).
+
+Weer.install({
+  // Required:
+  sendReports: {
+    toEmail: 'homerjsimpson@example.com',
+    inLanguages: ['en'],
+  },
+  // Optional:
+  extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
+  pacErrorIconUrl: 'https://example.com/img/pac-error-128.png',
+  maskIconUrl: 'https://example.com/img/mask-128.png',
+});
 ```
 
 ### Debugging
