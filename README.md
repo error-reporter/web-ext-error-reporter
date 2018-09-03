@@ -242,7 +242,8 @@ See [API.md](./API.md).
 
 ## Contribute
 
-You are welcome to propose [issues](https://github.com/error-reporter/weer/issues), pull requests or ask questions.
+You are welcome to propose [issues](https://github.com/error-reporter/weer/issues), pull requests or ask questions.  
+__By commiting your code you agree to give all the rights on your contribution to Ilya Ig. Petrov.__
 
 ## Credits
 
@@ -250,4 +251,5 @@ For credits of used assets see https://github.com/error-reporter/error-reporter.
 
 ## License
 
-[GPL-3.0+](./LICENSE)
+The product is dual-licensed under [GPL-3.0+](./LICENSE) and commercial license.
+To obtain commercial license contact [Ilya Ig. Petrov](https://github.com/ilyaigpetrov).
