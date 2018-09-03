@@ -54,7 +54,8 @@ export default [
     output: [
       { file: './dist/cjs/utils.js', format: 'cjs' },
       { file: './dist/esm/utils.js', format: 'es' },
-      { file: './dist/umd/utils.js',
+      {
+        file: './dist/umd/utils.js',
         format: 'umd',
         name: 'Weer.Utils',
         globals,
@@ -68,7 +69,8 @@ export default [
     output: [
       { file: './dist/cjs/error-catchers.js', format: 'cjs' },
       { file: './dist/esm/error-catchers.js', format: 'es' },
-      { file: './dist/umd/error-catchers.js',
+      {
+        file: './dist/umd/error-catchers.js',
         format: 'umd',
         name: 'Weer.ErrorCatchers',
         globals,
@@ -82,7 +84,8 @@ export default [
     output: [
       { file: './dist/cjs/get-notifiers-singleton.js', format: 'cjs' },
       { file: './dist/esm/get-notifiers-singleton.js', format: 'es' },
-      { file: './dist/umd/get-notifiers-singleton.js',
+      {
+        file: './dist/umd/get-notifiers-singleton.js',
         format: 'umd',
         name: 'Weer.GetNotifiersSingleton',
         globals,
@@ -102,7 +105,8 @@ export default [
     plugins,
     input: inSrc('index.js'),
     output: [
-      { file: './dist/umd/index.js',
+      {
+        file: './dist/umd/index.js',
         format: 'umd',
         name: 'Weer',
         globals,

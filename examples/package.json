@@ -9,7 +9,6 @@
     "dummy-weer": "shx touch ./dist/vendor/weer.js",
     "prepare": "npm run clean && npm run copy-vendor && npm run copy-ext && npm run dummy-weer",
     "copy-weer": "shx cp -r ../dist/umd/index.js ./dist/vendor/weer.js",
-
     "without-bundlers": "npm run prepare && npm run copy-weer && shx cp ./src/without-bundlers/index.js ./dist/.",
     "webpack": "npm run prepare && webpack ./src/esm-for-bundlers/index.js ./dist/index.js",
     "rollup": "npm run prepare && rollup -c",
@@ -20,9 +19,9 @@
   "devDependencies": {
     "debug": "^2.6.8",
     "rollup": "^0.45.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "shx": "^0.2.2",
     "webpack": "^3.4.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
