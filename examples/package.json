@@ -14,7 +14,7 @@
     "prepare": "npm run clean && npm run copy-vendor && npm run copy-ext && npm run dummy-weer",
     "copy-weer": "shx cp -r ../dist/umd/index.js ./dist/vendor/weer.js",
     "without-bundlers": "npm run prepare && npm run copy-weer && shx cp ./src/without-bundlers/index.js ./dist/.",
-    "webpack": "npm run prepare && webpack ./src/esm-for-bundlers/index.js ./dist/index.js",
+    "webpack": "npm run prepare && webpack --mode production ./src/esm-for-bundlers/index.js -o ./dist/index.js",
     "rollup": "npm run prepare && rollup -c",
     "start": "npm run without-bundlers"
   },
@@ -25,7 +25,8 @@
     "rollup": "^0.65.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "shx": "^0.2.2",
-    "webpack": "^3.4.1"
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
   },
   "dependencies": {}
 }
