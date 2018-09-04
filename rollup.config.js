@@ -37,14 +37,17 @@ const external = [
 
 const externalAll = [
   ...external,
-  ...absAndRel('error-catchers'),
-  ...absAndRel('get-notifiers-singleton'),
+  ...absAndRel('error-event-listeners'),
+  ...absAndRel('error-notifier'),
+  ...absAndRel('error-reporter'),
+  ...absAndRel('to-plain-object'),
+  ...absAndRel('error-types'),
 ];
 
 const utilsFullPath = Path.resolve(inSrc('utils'));
 
 const globals = {
-  [utilsFullPath]: 'Weer.Utils',
+  [utilsFullPath]: 'Weer.utils',
 };
 
 export default [
@@ -53,11 +56,11 @@ export default [
     input: inSrc('utils.js'),
     output: [
       { file: './dist/cjs/utils.js', format: 'cjs' },
-      { file: './dist/esm/utils.js', format: 'es' },
+      { file: './dist/esm/utils.js', format: 'esm' },
       {
         file: './dist/umd/utils.js',
         format: 'umd',
-        name: 'Weer.Utils',
+        name: 'Weer.utils',
         globals,
       },
     ],
@@ -65,14 +68,14 @@ export default [
   {
     plugins,
     external,
-    input: inSrc('error-catchers.js'),
+    input: inSrc('error-event-listeners.js'),
     output: [
-      { file: './dist/cjs/error-catchers.js', format: 'cjs' },
-      { file: './dist/esm/error-catchers.js', format: 'es' },
+      { file: './dist/cjs/error-event-listeners.js', format: 'cjs' },
+      { file: './dist/esm/error-event-listeners.js', format: 'esm' },
       {
-        file: './dist/umd/error-catchers.js',
+        file: './dist/umd/error-event-listeners.js',
         format: 'umd',
-        name: 'Weer.ErrorCatchers',
+        name: 'Weer.errorEventListeners',
         globals,
       },
     ],
@@ -80,14 +83,14 @@ export default [
   {
     plugins,
     external,
-    input: inSrc('get-notifiers-singleton.js'),
+    input: inSrc('error-notifier.js'),
     output: [
-      { file: './dist/cjs/get-notifiers-singleton.js', format: 'cjs' },
-      { file: './dist/esm/get-notifiers-singleton.js', format: 'es' },
+      { file: './dist/cjs/error-notifier.js', format: 'cjs' },
+      { file: './dist/esm/error-notifier.js', format: 'esm' },
       {
-        file: './dist/umd/get-notifiers-singleton.js',
+        file: './dist/umd/error-notifier.js',
         format: 'umd',
-        name: 'Weer.GetNotifiersSingleton',
+        name: 'Weer.errorNotifier',
         globals,
       },
     ],
@@ -98,7 +101,7 @@ export default [
     input: inSrc('index.js'),
     output: [
       { file: './dist/cjs/index.js', format: 'cjs' },
-      { file: './dist/esm/index.js', format: 'es' },
+      { file: './dist/esm/index.js', format: 'esm' },
     ],
   },
   {

@@ -1,7 +1,7 @@
 'use strict'; // eslint-disable-line
 
 chrome.runtime.getBackgroundPage(
-  (bgWindow) => bgWindow.Weer.ErrorCatchers.installListenersOn(
+  (bgWindow) => bgWindow.Weer.installGlobalHandlersOn(
     { hostWindow: window, nameForDebug: 'PUP' },
     () => {
 
