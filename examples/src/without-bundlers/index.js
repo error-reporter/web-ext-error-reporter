@@ -1,15 +1,16 @@
 /* eslint-disable no-console, strict */
-
 'use strict';
 
-console.log('Extension started.');
-
-window.Weer.install({
-  sendReports: {
-    toEmail: 'your@email.com',
-    inLanguages: ['ru', 'en'],
-  },
+window.Weer.addGlobalHandler((errorType, errorEvent) => {
+  console.log('Global handler caught:', errorType, errorEvent);
 });
+
+window.Weer.installErrorReporter({
+  toEmail: 'ilyaigpetrov+weer-test@gmail.com',
+  reportLangs: ['ru'],
+});
+
+console.log('Extension started.');
 
 window.bar = function foo() {
   throw new Error('Err in BG');
