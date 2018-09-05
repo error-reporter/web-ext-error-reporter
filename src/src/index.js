@@ -5,7 +5,7 @@ import {
 } from './global-error-event-handlers';
 import { installErrorNotifier } from './error-notifier';
 import { openErrorReporter, makeReport } from './error-reporter';
-import { errorEventToPlainObject } from './to-plain-object';
+import { errorEventToPlainObject } from './error-event-to-plain-object';
 import { EXT_ERROR } from './error-types';
 import * as Utils from './utils';
 
