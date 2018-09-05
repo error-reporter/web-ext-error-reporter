@@ -70,6 +70,13 @@ chrome.tabs.getCurrent(() => setTimeout(() => {
   throw new Error('Timeouted Chrome API callback (caught by handlers)');
 
 }, 0));
+
+// Case 5
+chrome.tabs.getCurrent(async () => {
+
+  throw new Error('Async Chrome API callback (caught by handlers)');
+
+});
 ```
 So if you want error catchers to work — your code must be wrapped in `setTimeout`.
 
@@ -123,6 +130,13 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
   throw new Error('Timeouted Chrome API callback (caught by Weer)');
 
 }));
+
+// Case 5
+chrome.tabs.getCurrent(async () => {
+
+  throw new Error('Async Chrome API callback (caught by Weer)');
+
+});
 ```
 
 ## Install
@@ -199,14 +213,16 @@ $ cat foo-extension/manifest.json
 #### BG Window
 
 ```js
-// Import Weer somehow.
-window.Weer = Weer; // Expose for non-bg windows (popup, settings, etc.).
+'use strict'; // Only if you don't use ES6 modules.
+// For EcmaScript modules (node_modules/weer/esm) and CommonJS (node_modules/weer/cjs):
+//   1. Import Weer somehow.
+//   2. window.Weer = Weer; // Expose for non-bg windows (popup, settings, etc.).
 
 Weer.install({
   // Required:
   sendReports: {
     toEmail: 'homerjsimpson@example.com',
-    inLanguages: ['en'],
+    inLanguages: ['en'], // In what languages to show report template.
   },
   // Optional:
   extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
