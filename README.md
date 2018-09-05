@@ -199,14 +199,16 @@ $ cat foo-extension/manifest.json
 #### BG Window
 
 ```js
-// Import Weer somehow.
-window.Weer = Weer; // Expose for non-bg windows (popup, settings, etc.).
+'use strict'; // Only if you don't use ES6 modules.
+// For EcmaScript modules (node_modules/weer/esm) and CommonJS (node_modules/weer/cjs):
+//   1. Import Weer somehow.
+//   2. window.Weer = Weer; // Expose for non-bg windows (popup, settings, etc.).
 
 Weer.install({
   // Required:
   sendReports: {
     toEmail: 'homerjsimpson@example.com',
-    inLanguages: ['en'],
+    inLanguages: ['en'], // In what languages to show report template.
   },
   // Optional:
   extErrorIconUrl: 'https://example.com/img/ext-error-128.png',
