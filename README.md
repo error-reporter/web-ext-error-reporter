@@ -130,6 +130,13 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
   throw new Error('Timeouted Chrome API callback (caught by Weer)');
 
 }));
+
+// Case 5
+chrome.tabs.getCurrent(async () => {
+
+  throw new Error('Async Chrome API callback (caught by Weer)');
+
+});
 ```
 
 ## Install
