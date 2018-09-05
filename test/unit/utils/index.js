@@ -20,7 +20,6 @@ describe('Weer.Utils', () => {
       foo('one');
     expect(wrapper, '`mandatory` throws TypeError when argument is not passed').to.throw(TypeError);
 
-
   });
 
   it('provides `throwIfError`', () => {
