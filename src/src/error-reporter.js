@@ -17,7 +17,7 @@ export const makeReport = ({
 // eslint-disable-next-line
 export const openErrorReporter = ({
   toEmail = mandatory(),
-  reportLangs = mandatory(),
+  receiveReportsInLangs = mandatory(),
   errorTitle = mandatory(),
   report = mandatory(),
 } = {}) => {
@@ -30,10 +30,13 @@ export const openErrorReporter = ({
 
   const json = JSON.stringify(report);
   const url = `${
-    'https://error-reporter.github.io/v0/error/view/?title={{errorTitle}}&json={{json}}&reportLangs={{reportLangs}}'
+    'https://error-reporter.github.io/v0/error/view/?title={{errorTitle}}&json={{json}}&reportLangs={{receiveReportsInLangs}}'
       .replace('{{errorTitle}}', encodeURIComponent(errorTitle))
       .replace('{{json}}', encodeURIComponent(json))
-      .replace('{{reportLangs}}', encodeURIComponent(reportLangs.join(',')))
+      .replace(
+        '{{receiveReportsInLangs}}',
+        encodeURIComponent(receiveReportsInLangs.join(',')),
+      )
   }#toEmail=${encodeURIComponent(toEmail)}`;
 
   chrome.tabs.create(
