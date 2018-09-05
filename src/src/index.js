@@ -31,8 +31,8 @@ installGlobalHandlersOn({
 
 export const installErrorReporter = ({
   toEmail = mandatory(),
-  reportLangs = ['en'],
-  ifToNotifyAboutTypedErrorEvent = (/* errorType, errorEvent */) => true,
+  receiveReportsInLangs = ['en'],
+  ifToNotifyAboutAsync = (/* errorType, errorEvent */) => true,
 } = {}) => {
 
   const {
@@ -40,8 +40,12 @@ export const installErrorReporter = ({
     uninstallErrorNotifier,
   } = installErrorNotifier();
 
-  const anotherGlobalHandler = (errorType, errorEvent) => {
-    if (!ifToNotifyAboutTypedErrorEvent(errorType, errorEvent)) {
+  const anotherGlobalHandler = async (errorType, errorEvent) => {
+    const ifToNotify = await ifToNotifyAboutAsync(
+      errorType,
+      errorEvent,
+    );
+    if (!ifToNotify) {
       return;
     }
     notifyAboutError({
@@ -50,7 +54,7 @@ export const installErrorReporter = ({
       clickHandler: () =>
         openErrorReporter({
           toEmail,
-          reportLangs,
+          receiveReportsInLangs,
           errorTitle: errorEvent.message || errorEvent.error,
           report: makeReport({
             errorType,
