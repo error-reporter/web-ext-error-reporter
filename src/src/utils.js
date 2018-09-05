@@ -104,7 +104,10 @@ const Utils = {
 
     }, {});
     if (plainObj.path) {
-      const pathStr = plainObj.path.map((o) => {
+      // Once it happend that `o` was undefined.
+      // I couldn't reproduce this behavior anymore.
+      // However I've added .filter to handle it.
+      const pathStr = plainObj.path.filter((o) => o).map((o) => {
 
         let res = '';
         if (o.tagName) {
