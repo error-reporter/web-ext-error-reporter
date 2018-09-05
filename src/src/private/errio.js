@@ -1,6 +1,6 @@
 /*
-Repository: https://github.com/programble/errio
-This code is copypasted from Errio libarary under the following license.
+Errio repository: https://github.com/programble/errio
+This code derives from Errio libarary distributed under the following license.
 
 Copyright © 2015, Curtis McEnroe curtis@cmcenroe.me
 
@@ -20,46 +20,13 @@ const defaultOptions = {
   include: [],     // Property names to include (high priority)
 };
 
-// Object containing registered error constructors and their options.
-const errors = {};
-
-// Register an error constructor for serialization and deserialization with
-// option overrides. Name can be specified in options, otherwise it will be
-// taken from the prototype's name property (if it is not set to Error), the
-// constructor's name property, or the name property of an instance of the
-// constructor.
-const register = (constructor, options) => {
-  options = options || {};
-  const prototypeName = constructor.prototype.name !== 'Error'
-    ? constructor.prototype.name
-    : null;
-  const name = options.name
-    || prototypeName
-    || constructor.name
-    || new constructor().name;
-  errors[name] = { constructor: constructor, options: options };
-};
-
 // Serialize an error instance to a plain object with option overrides, applied
 // on top of the global defaults and the registered option overrides. If the
 // constructor of the error instance has not been registered yet, register it
 // with the provided options.
-export const toObject = (error, callOptions) => {
-  callOptions = callOptions || {};
+export const toObject = (error, callOptions = {}) => {
 
-  if (!errors[error.name]) {
-    // Make sure we register with the name of this instance.
-    callOptions.name = error.name;
-    register(error.constructor, callOptions);
-  }
-
-  const errorOptions = errors[error.name].options;
-  const options = {};
-  for (const key in defaultOptions) {
-    if (callOptions.hasOwnProperty(key)) options[key] = callOptions[key];
-    else if (errorOptions.hasOwnProperty(key)) options[key] = errorOptions[key];
-    else options[key] = defaultOptions[key];
-  }
+  const options = { ...defaultOptions, ...callOptions };
 
   // Always explicitly include essential error properties.
   const object = {
@@ -67,7 +34,9 @@ export const toObject = (error, callOptions) => {
     message: error.message,
   };
   // Explicitly include stack since it is not always an enumerable property.
-  if (options.stack) object.stack = error.stack;
+  if (options.stack) {
+    object.stack = error.stack;
+  }
 
   for (const prop in error) {
     // Skip exclusion checks if property is in include list.
@@ -76,12 +45,15 @@ export const toObject = (error, callOptions) => {
 
       if (options.exclude.indexOf(prop) !== -1) continue;
 
-      if (!options.inherited)
-        if (!error.hasOwnProperty(prop)) continue;
-      if (!options.stack)
+      if (!options.inherited) {
+        if (!Object.prototype.hasOwnProperty.call(error, prop)) continue;
+      }
+      if (!options.stack) {
         if (prop === 'stack') continue;
-      if (!options.private)
+      }
+      if (!options.private) {
         if (prop[0] === '_' || prop[prop.length - 1] === '_') continue;
+      }
     }
 
     const value = error[prop];
@@ -89,7 +61,7 @@ export const toObject = (error, callOptions) => {
     // Recurse if nested object has name and message properties.
     if (typeof value === 'object' && value && value.name && value.message) {
       if (options.recursive) {
-        object[prop] = errorToObject(value, callOptions);
+        object[prop] = toObject(value, options);
       }
       continue;
     }
