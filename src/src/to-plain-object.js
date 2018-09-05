@@ -1,7 +1,5 @@
-import { createErrorToObject } from './private/errio';
+import { toObject } from './private/errio';
 import { mandatory } from './utils';
-
-const toObject = createErrorToObject();
 
 export const errorToPlainObject = (error = mandatory()) =>
   toObject(error, { stack: true, private: true });
