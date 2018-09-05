@@ -70,6 +70,13 @@ chrome.tabs.getCurrent(() => setTimeout(() => {
   throw new Error('Timeouted Chrome API callback (caught by handlers)');
 
 }, 0));
+
+// Case 5
+chrome.tabs.getCurrent(async () => {
+
+  throw new Error('Async Chrome API callback (caught by handlers)');
+
+});
 ```
 So if you want error catchers to work — your code must be wrapped in `setTimeout`.
 
