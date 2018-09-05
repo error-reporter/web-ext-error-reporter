@@ -47,7 +47,7 @@ const externalAll = [
 const utilsFullPath = Path.resolve(inSrc('utils'));
 
 const globals = {
-  [utilsFullPath]: 'Weer.utils',
+  [utilsFullPath]: 'Weer.Utils',
 };
 
 export default [
@@ -60,7 +60,7 @@ export default [
       {
         file: './dist/umd/utils.js',
         format: 'umd',
-        name: 'Weer.utils',
+        name: 'Weer.Utils',
         globals,
       },
     ],
@@ -76,6 +76,21 @@ export default [
         file: './dist/umd/error-event-listeners.js',
         format: 'umd',
         name: 'Weer.errorEventListeners',
+        globals,
+      },
+    ],
+  },
+  {
+    plugins,
+    external,
+    input: inSrc('global-error-event-handlers.js'),
+    output: [
+      { file: './dist/cjs/global-error-event-handlers.js', format: 'cjs' },
+      { file: './dist/esm/global-error-event-handlers.js', format: 'esm' },
+      {
+        file: './dist/umd/global-error-event-handlers.js',
+        format: 'umd',
+        name: 'Weer.globalErrorEventHandlers',
         globals,
       },
     ],
