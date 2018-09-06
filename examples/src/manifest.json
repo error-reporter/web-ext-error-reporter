@@ -9,9 +9,7 @@
   "homepage_url": "https://cool-extension.example.com",
 
   "permissions": [
-      "activeTab"
-    , "notifications"
-    , "<all_urls>"
+    "notifications"
   ],
 
   "background": {

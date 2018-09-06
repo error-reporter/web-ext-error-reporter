@@ -7,7 +7,7 @@ window.Weer.addGlobalHandler((errorType, errorEvent) => {
 
 window.Weer.installErrorReporter({
   toEmail: 'ilyaigpetrov+weer-test@gmail.com',
-  reportLangs: ['ru'],
+  sendReportsInLanguages: ['ru'],
 });
 
 console.log('Extension started.');

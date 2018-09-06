@@ -14,10 +14,9 @@ export const makeReport = ({
   platform: navigator.platform,
 });
 
-// eslint-disable-next-line
 export const openErrorReporter = ({
   toEmail = mandatory(),
-  receiveReportsInLangs = mandatory(),
+  sendReportsInLanguages = mandatory(),
   errorTitle = mandatory(),
   report = mandatory(),
 } = {}) => {
@@ -30,12 +29,12 @@ export const openErrorReporter = ({
 
   const json = JSON.stringify(report);
   const url = `${
-    'https://error-reporter.github.io/v0/error/view/?title={{errorTitle}}&json={{json}}&reportLangs={{receiveReportsInLangs}}'
+    'https://error-reporter.github.io/v0/error/view/?title={{errorTitle}}&json={{json}}&reportLangs={{reportLangs}}'
       .replace('{{errorTitle}}', encodeURIComponent(errorTitle))
       .replace('{{json}}', encodeURIComponent(json))
       .replace(
-        '{{receiveReportsInLangs}}',
-        encodeURIComponent(receiveReportsInLangs.join(',')),
+        '{{reportLangs}}',
+        encodeURIComponent(sendReportsInLanguages.join(',')),
       )
   }#toEmail=${encodeURIComponent(toEmail)}`;
 

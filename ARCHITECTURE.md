@@ -141,13 +141,13 @@ Objectives: Given a serializable object describing an error (variable `report`),
 ```js
 export const openErrorReporter = ({
   toEmail = mandatory(),
-  receiveReportsInLanguages = mandatory(),
+  sendReportsInLanguages = mandatory(),
   errorTitle = mandatory(),
   report = mandatory(),
 } = {}) => {...};
 ```
 `toEmail` — To which email report must be sent after pressing "Send".  
-`receiveReportsInLanguages` — E.g. `['ru', 'en']`. In what language to show message template to the user (based on `navigator.language`).  
+`sendReportsInLanguages` — E.g. `['ru', 'en']`. In what language to show message template to the user (based on `navigator.language`).  
 `errorTitle` — Name of the error showed to the user, e.g. `Error "TypeError: FOOBAR" occurred...`. Don't confuse with `error.name` (e.g. `'TypeError'`).  
 `report` — Serializable object with required properties: `extName`, `version` and `payload` (error or errorEvent as plain object).
 
@@ -214,7 +214,7 @@ export {
 ```js
 export const installErrorReporter = ({
   toEmail = mandatory(),
-  receiveReportsInLanguages = ['en'],
+  sendReportsInLanguages = ['en'],
   ifToNotifyAboutAsync = (/* errorType, errorEvent */) => true,
 } = {}) => {
 ```

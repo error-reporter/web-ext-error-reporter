@@ -6,12 +6,22 @@ import { EXT_ERROR, PAC_ERROR } from './error-types';
 const debug = Debug('weer:catcher');
 
 const bgName = 'BG';
+const generateNameForDebug = (hostWindow) => {
+
+  if (hostWindow === window) {
+    return bgName;
+  }
+  return hostWindow.location.href
+    .replace(/^.+\//, '')
+    .replace(/.html$/, '')
+    .toUpperCase();
+};
 
 // eslint-disable-next-line
 export const installTypedErrorEventListenersOn = ({
   hostWindow = mandatory(),
-  nameForDebug = bgName,
   typedErrorEventListener = mandatory(),
+  nameForDebug = generateNameForDebug(hostWindow),
 } = {}, cb) => {
 
   const ifInBg = hostWindow === window;
@@ -45,8 +55,10 @@ export const installTypedErrorEventListenersOn = ({
   hostWindow.addEventListener('unhandledrejection', rejHandler, ifUseCapture);
 
   if (chrome.proxy && ifInBg) {
-    chrome.proxy.onProxyError.addListener(timeouted(async (details) => {
+    chrome.proxy.onProxyError.addListener(async (details) => {
 
+      // TODO: This handler is not timeouted.
+      // TODO: Test throwing error here and catching it.
       const ifControlled = await areProxySettingsControlledAsync();
       if (!ifControlled) {
         // PAC script is not controlled by this extension,
@@ -61,7 +73,7 @@ export const installTypedErrorEventListenersOn = ({
         }
       */
       typedErrorEventListener(PAC_ERROR, details);
-    }));
+    });
   }
 
   if (cb) {

@@ -64,7 +64,6 @@ export const installErrorNotifier = ({
   };
 
   const notyIdToClickHandler = {};
-  window.notyIdToClickHandler = notyIdToClickHandler; // TODO: test.
   const notyClickedListener = timeouted(
     (notyId) =>
       (notyIdToClickHandler[notyId] || (() => {}))(),
@@ -79,20 +78,17 @@ export const installErrorNotifier = ({
   const notifyWithHandler = ({
     notyOptions = mandatory(),
     clickHandler = mandatory(),
-  }) => {
-
-    chrome.notifications.create(
-      notyOptions,
-      (notyId) => {
-        notyIdToClickHandler[notyId] = clickHandler;
-      },
-    );
-  };
+  }) => chrome.notifications.create(
+    notyOptions,
+    (notyId) => {
+      notyIdToClickHandler[notyId] = clickHandler;
+    },
+  );
 
   const notifyAboutError = async ({
     clickHandler = mandatory(),
-    // ErrorEvent, Error, { message: '...' } or String
-    errorLikeOrMessage = mandatory(),
+    // ErrorEvent (EXT_ERROR, PAC_ERROR), Error, { message: '...' } or String
+    errorEventLike = mandatory(),
     errorType = ErrorTypes.EXT_ERROR,
     notyTitle = 'Extension error',
     context = `${manifest.name} ${manifest.version}`,
@@ -107,9 +103,9 @@ export const installErrorNotifier = ({
 
     const errMessage = (
       errorType === ErrorTypes.PAC_ERROR
-        ? errorLikeOrMessage.error
-        : errorLikeOrMessage.message
-    ) || errorLikeOrMessage.toString();
+        ? errorEventLike.error
+        : errorEventLike.message
+    ) || errorEventLike.toString();
     const iconUrl = await loadIconAsBlobUrlAsync(
       errorTypeToIconUrl[errorType],
     );
