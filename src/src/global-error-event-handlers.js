@@ -27,10 +27,10 @@ const triggerGlobalHandlers = (
 ) =>
   globalTypedErrorEventHandlers.forEach((handler) => handler(errorType, errorEvent));
 
-export const installGlobalHandlersOn = function installGlobalHandlersOn(
+export const installGlobalHandlersOn = (
   { hostWindow, nameForDebug },
   cb,
-) {
+) => {
   const uninstallGlobalHandlers = installTypedErrorEventListenersOn(
     {
       hostWindow,
@@ -39,15 +39,14 @@ export const installGlobalHandlersOn = function installGlobalHandlersOn(
     },
     // cb is not invoked immediately, but timeouted,
     // that's why uninstallGlobalHandlers will be defined.
-    () => cb && cb({ uninstallGlobalHandlers }),
+    () => cb && cb(uninstallGlobalHandlers),
   );
   return uninstallGlobalHandlers;
 };
 
-export const installGlobalHandlersOnAsync = function installGlobalHandlersOnAsync(opts) {
-  return new Promise((resolve) =>
+export const installGlobalHandlersOnAsync = (opts) =>
+  new Promise((resolve) =>
     installGlobalHandlersOn(
       opts,
       resolve,
     ));
-};
