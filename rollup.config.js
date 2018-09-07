@@ -41,7 +41,7 @@ const externalAll = [
   ...absAndRel('error-notifier'),
   ...absAndRel('error-reporter'),
   ...absAndRel('to-plain-object'),
-  ...absAndRel('error-types'),
+  // ...absAndRel('error-types'),
 ];
 
 const utilsFullPath = Path.resolve(inSrc('utils'));
@@ -75,7 +75,7 @@ export default [
       {
         file: './dist/umd/error-event-listeners.js',
         format: 'umd',
-        name: 'Weer.errorEventListeners',
+        name: 'Weer.ErrorEventListeners',
         globals,
       },
     ],
@@ -90,7 +90,7 @@ export default [
       {
         file: './dist/umd/global-error-event-handlers.js',
         format: 'umd',
-        name: 'Weer.globalErrorEventHandlers',
+        name: 'Weer.GlobalErrorEventHandlers',
         globals,
       },
     ],
@@ -105,7 +105,22 @@ export default [
       {
         file: './dist/umd/error-notifier.js',
         format: 'umd',
-        name: 'Weer.errorNotifier',
+        name: 'Weer.ErrorNotifier',
+        globals,
+      },
+    ],
+  },
+  {
+    plugins,
+    external,
+    input: inSrc('error-reporter.js'),
+    output: [
+      { file: './dist/cjs/error-reporter.js', format: 'cjs' },
+      { file: './dist/esm/error-reporter.js', format: 'esm' },
+      {
+        file: './dist/umd/error-reporter.js',
+        format: 'umd',
+        name: 'Weer.ErrorReporter',
         globals,
       },
     ],
