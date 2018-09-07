@@ -5,8 +5,7 @@ const getSettingsAsync = () =>
     chrome.proxy.settings.get(
       {},
       getOrDie(resolve),
-    ),
-  );
+    ));
 
 /*
 * Possible values for levelOfControl:
@@ -17,16 +16,16 @@ const getSettingsAsync = () =>
 * 4. "controlled_by_this_extension"
 *
 * See: https://developer.chrome.com/extensions/proxy
-**/
+*/
 
-export const areProxySettingsControllableAsync = async(details_) => {
+export const areProxySettingsControllableAsync = async (details_) => {
 
   const details = details_ || await getSettingsAsync();
   return details.levelOfControl.startsWith('controllable_by_this');
 
 };
 
-export const areProxySettingsControlledAsync = async(details_) => {
+export const areProxySettingsControlledAsync = async (details_) => {
 
   const details = details_ || await getSettingsAsync();
   return details.levelOfControl.startsWith('controlled_by_this');
