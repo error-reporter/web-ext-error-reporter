@@ -1,6 +1,6 @@
 # License
 
-The product is dual-licensed under [GPL-3.0+](#GPL) and commercial license.
+This product is dual-licensed under [GPL-3.0+](#GPL) and commercial license.
 To obtain commercial license contact [Ilya Ig. Petrov](https://github.com/ilyaigpetrov).
 
 ## GPL
