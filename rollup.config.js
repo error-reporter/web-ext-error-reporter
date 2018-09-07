@@ -1,149 +1,46 @@
 import Path from 'path';
-import NodeResolve from 'rollup-plugin-node-resolve';
-import CommonJs from 'rollup-plugin-commonjs';
+import shell from 'shelljs';
+const { LERNA_PACKAGE_NAME, LERNA_ROOT_PATH } = process.env;
+const PACKAGE_ROOT_PATH = process.cwd();
 
-const srcPath = Path.join('.', 'src', 'src');
-const inSrc = (relPath) => Path.join(srcPath, relPath);
+/*
+console.log('PKG ROOT PATH', PACKAGE_ROOT_PATH);
+console.log('LERNA ROOT PATH', LERNA_ROOT_PATH);
+console.log('LERNA PKG NAME', LERNA_PACKAGE_NAME);
+*/
 
-const plugins = [
-  NodeResolve({
-    browser: true,
-  }),
-  CommonJs({
-    include: [
-      './src/node_modules/**',
-    ],
-  }),
-];
+const PKG = require(Path.join(PACKAGE_ROOT_PATH, 'package.json'));
 
-const absAndRel = (filePath) => [
+/*
+  @weer/utils -> utils.js
+  @weer/commons/error-types -> error-types.js
+**/
+const pkgNameToFilename = (name) =>
+  name.replace(/^.+\//, '') + '.js';
 
-  // './utils'
+const filename = pkgNameToFilename(PKG.name);
+const allInOnePath = Path.join(LERNA_ROOT_PATH, 'packages', 'weer-weer');
 
-  `.${Path.sep}${filePath}`, // `Path.join` won't work here.
-
-  // Absolute. Required.
-
-  Path.resolve(
-    inSrc(filePath),
-  ),
-];
-
-const external = [
-  ...absAndRel('utils'),
-  '../utils',
-  'debug',
-];
-
-const externalAll = [
-  ...external,
-  ...absAndRel('error-event-listeners'),
-  ...absAndRel('error-notifier'),
-  ...absAndRel('error-reporter'),
-  ...absAndRel('to-plain-object'),
-  // ...absAndRel('error-types'),
-];
-
-const utilsFullPath = Path.resolve(inSrc('utils'));
-
-const globals = {
-  [utilsFullPath]: 'Weer.Utils',
-};
-
-export default [
+const output = (outputFile) => [
   {
-    plugins,
-    input: inSrc('utils.js'),
-    output: [
-      { file: './dist/cjs/utils.js', format: 'cjs' },
-      { file: './dist/esm/utils.js', format: 'esm' },
-      {
-        file: './dist/umd/utils.js',
-        format: 'umd',
-        name: 'Weer.Utils',
-        globals,
-      },
-    ],
-  },
-  {
-    plugins,
-    external,
-    input: inSrc('error-event-listeners.js'),
-    output: [
-      { file: './dist/cjs/error-event-listeners.js', format: 'cjs' },
-      { file: './dist/esm/error-event-listeners.js', format: 'esm' },
-      {
-        file: './dist/umd/error-event-listeners.js',
-        format: 'umd',
-        name: 'Weer.ErrorEventListeners',
-        globals,
-      },
-    ],
-  },
-  {
-    plugins,
-    external,
-    input: inSrc('global-error-event-handlers.js'),
-    output: [
-      { file: './dist/cjs/global-error-event-handlers.js', format: 'cjs' },
-      { file: './dist/esm/global-error-event-handlers.js', format: 'esm' },
-      {
-        file: './dist/umd/global-error-event-handlers.js',
-        format: 'umd',
-        name: 'Weer.GlobalErrorEventHandlers',
-        globals,
-      },
-    ],
-  },
-  {
-    plugins,
-    external,
-    input: inSrc('error-notifier.js'),
-    output: [
-      { file: './dist/cjs/error-notifier.js', format: 'cjs' },
-      { file: './dist/esm/error-notifier.js', format: 'esm' },
-      {
-        file: './dist/umd/error-notifier.js',
-        format: 'umd',
-        name: 'Weer.ErrorNotifier',
-        globals,
-      },
-    ],
-  },
-  {
-    plugins,
-    external,
-    input: inSrc('error-reporter.js'),
-    output: [
-      { file: './dist/cjs/error-reporter.js', format: 'cjs' },
-      { file: './dist/esm/error-reporter.js', format: 'esm' },
-      {
-        file: './dist/umd/error-reporter.js',
-        format: 'umd',
-        name: 'Weer.ErrorReporter',
-        globals,
-      },
-    ],
-  },
-  {
-    plugins,
-    external: externalAll,
-    input: inSrc('index.js'),
-    output: [
-      { file: './dist/cjs/index.js', format: 'cjs' },
-      { file: './dist/esm/index.js', format: 'esm' },
-    ],
-  },
-  {
-    plugins,
-    input: inSrc('index.js'),
-    output: [
-      {
-        file: './dist/umd/index.js',
-        format: 'umd',
-        name: 'Weer',
-        globals,
-      },
-    ],
+    file: Path.join(allInOnePath, outputFile),
+    format: 'esm',
+    paths: (pkgName) => {
+
+      console.log('PATH CHANGE FOR', pkgName);
+      return `./${pkgNameToFilename(pkgName)}`;
+    },
   },
 ];
+
+export default PKG.module ?
+[
+  {
+    input: PKG.module,
+    output: output(filename),
+  },
+] :
+shell.ls('*.js').map((jsFile) => ({
+  input: Path.join(PACKAGE_ROOT_PATH, jsFile),
+  output: output(jsFile),
+}));

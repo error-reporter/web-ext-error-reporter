@@ -17,6 +17,7 @@
     "preinstall": "cd ./src && npm install",
     "postinstall": "npm run pack-debug",
     "pack-debug": "cd ./node_modules/debug && make browser && cd - && cp ./node_modules/debug/dist/debug.js ./vendor/optional-debug.js",
+    "lerna-build": "lerna exec --ignore @weer/weer -- rollup -c=../../rollup.config.js",
     "build": "shx rm -rf ./dist && rollup -c && shx cp ./src/package.json ./dist/. && shx cp ./API.md ./dist/README.md",
     "start": "npm run build",
     "__check": "flow status",
@@ -49,6 +50,7 @@
     "rollup": "^0.65.0",
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.3.0",
+    "shelljs": "^0.8.2",
     "shx": "^0.3.2",
     "sinon": "^6.1.5",
     "sinon-chrome": "^2.3.2"

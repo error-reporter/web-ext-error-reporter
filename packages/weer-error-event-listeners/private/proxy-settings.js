@@ -1,4 +1,4 @@
-import { getOrDie } from '../utils';
+import { getOrDie } from '@weer/utils';
 
 const getSettingsAsync = () =>
   new Promise((resolve) =>
