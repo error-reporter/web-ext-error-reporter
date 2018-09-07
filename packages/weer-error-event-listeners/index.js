@@ -1,4 +1,4 @@
-import Debug from '@weer/commons/debug';
+import Debug from '@weer/commons/private/debug';
 import { mandatory, assert, timeouted } from '@weer/utils';
 import { EXT_ERROR, PAC_ERROR } from '@weer/commons/error-types';
 import { areProxySettingsControlledAsync } from './private/proxy-settings';
