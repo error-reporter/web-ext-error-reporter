@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@weer/utils": "*",
-    "@weer/error-event-listeners": "*"
+    "@weer/error-event-listeners": "^0.0.1",
+    "@weer/utils": "^0.0.1"
   }
 }

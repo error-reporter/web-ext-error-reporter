@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@weer/utils": "*"
+    "@weer/utils": "^0.0.1"
   }
 }

@@ -9,11 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@weer/global-error-event-handlers": "*",
-    "@weer/error-notifier": "*",
-    "@weer/error-reporter": "*",
-    "@weer/error-event-to-plain-object": "*",
-    "@weer/commons": "*",
-    "@weer/utils": "*"
+    "@weer/commons": "^0.0.1",
+    "@weer/error-event-to-plain-object": "^0.0.1",
+    "@weer/error-notifier": "^0.0.1",
+    "@weer/error-reporter": "^0.0.1",
+    "@weer/global-error-event-handlers": "^0.0.1",
+    "@weer/utils": "^0.0.1"
   }
 }

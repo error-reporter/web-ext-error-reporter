@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@weer/commons": "*",
-    "@weer/utils": "*"
+    "@weer/commons": "^0.0.1",
+    "@weer/utils": "^0.0.1"
   }
 }
