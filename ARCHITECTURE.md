@@ -210,7 +210,7 @@ export {
   installGlobalHandlersOnAsync,
   addGlobalHandler,
 };
-...
+// ...
 export const installErrorReporter = ({
   toEmail = mandatory(),
   sendReportsInLanguages = ['en'],
