@@ -2,12 +2,12 @@ import {
   installGlobalHandlersOn,
   installGlobalHandlersOnAsync,
   addGlobalHandler,
-} from './global-error-event-handlers';
-import { installErrorNotifier } from './error-notifier';
-import { openErrorReporter, makeReport } from './error-reporter';
-import { errorEventToPlainObject } from './error-event-to-plain-object';
-import { EXT_ERROR } from './error-types';
-import * as Utils from './utils';
+} from '@weer/global-error-event-handlers';
+import { installErrorNotifier } from '@weer/error-notifier';
+import { openErrorReporter, makeReport } from '@weer/error-reporter';
+import { errorEventToPlainObject } from '@weer/error-event-to-plain-object';
+import { EXT_ERROR } from '@weer/commons/error-types';
+import * as Utils from '@weer/utils';
 
 const { mandatory } = Utils;
 

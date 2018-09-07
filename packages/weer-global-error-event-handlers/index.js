@@ -1,5 +1,5 @@
-import { installTypedErrorEventListenersOn } from './error-event-listeners';
-import { mandatory } from './utils';
+import { installTypedErrorEventListenersOn } from '@weer/error-event-listeners';
+import { mandatory } from '@weer/utils';
 
 /*
  In this file we will be using term handler instead of listener.
