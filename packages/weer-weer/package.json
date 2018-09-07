@@ -1,10 +1,10 @@
 {
   "name": "@weer/weer",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Web Extensions Error Reporter catches global errors, shows notifications and opens error reporter in one click",
+  "license": "SEE LICENSE IN ./LICENSE.md",
   "module": "./index.js",
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
-  "license": "GPL-3.0+",
   "repository": {
     "type": "git",
     "url": "https://github.com/error-reporter/weer"
@@ -12,6 +12,9 @@
   "keywords": [
     "web-extensions",
     "error",
-    "report"
-  ]
+    "reporter"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

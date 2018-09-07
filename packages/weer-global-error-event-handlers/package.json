@@ -1,15 +1,27 @@
 {
   "name": "@weer/global-error-event-handlers",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "module": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/error-reporter/weer"
+  },
+  "keywords": [
+    "web-extensions",
+    "error",
+    "event"
+  ],
+  "license": "SEE LICENSE IN ./LICENSE.md",
   "dependencies": {
-    "@weer/utils": "*",
-    "@weer/error-event-listeners": "*"
+    "@weer/error-event-listeners": "^0.0.0",
+    "@weer/utils": "^0.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

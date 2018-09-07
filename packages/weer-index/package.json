@@ -1,19 +1,31 @@
 {
   "name": "@weer/index",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "module": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/error-reporter/weer"
+  },
+  "keywords": [
+    "web-extensions",
+    "error",
+    "reporter"
+  ],
+  "license": "SEE LICENSE IN ./LICENSE.md",
   "dependencies": {
-    "@weer/global-error-event-handlers": "*",
-    "@weer/error-notifier": "*",
-    "@weer/error-reporter": "*",
-    "@weer/error-event-to-plain-object": "*",
-    "@weer/commons": "*",
-    "@weer/utils": "*"
+    "@weer/commons": "^0.0.0",
+    "@weer/error-event-to-plain-object": "^0.0.0",
+    "@weer/error-notifier": "^0.0.0",
+    "@weer/error-reporter": "^0.0.0",
+    "@weer/global-error-event-handlers": "^0.0.0",
+    "@weer/utils": "^0.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

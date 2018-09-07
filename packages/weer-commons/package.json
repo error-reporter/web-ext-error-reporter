@@ -1,10 +1,21 @@
 {
   "name": "@weer/commons",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/error-reporter/weer"
+  },
+  "keywords": [
+    "web-extensions",
+    "error"
+  ],
+  "license": "SEE LICENSE IN ./LICENSE.md",
+  "publishConfig": {
+    "access": "public"
+  }
 }
