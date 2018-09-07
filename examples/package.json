@@ -8,15 +8,19 @@
   },
   "scripts": {
     "clean": "shx rm -rf dist && mkdir dist",
-    "copy-ext": "shx cp ./src/manifest.json ./dist/. && shx cp -r ./src/pages ./dist/.",
-    "dummy-weer": "shx touch ./dist/vendor/weer.js",
-    "prepare": "npm run clean && npm run copy-vendor && npm run copy-ext && npm run dummy-weer",
+    "copy-pages": "shx cp -r ./src/pages ./dist/.",
+    "copy-vendor": "shx cp -r ../vendor ./dist/vendor",
+    "prepare": "npm run clean && npm run copy-vendor && npm run copy-pages",
+
+    "copy-esm-ext": "shx cp -r ./src/esm/* ./dist/.",
+    "copy-esm-weer": "shx cp -r ../packages/weer-weer ./dist/vendor/weer",
+    "pure-esm": "npm run prepare && npm run copy-esm-weer && npm run copy-esm-ext",
+
     "copy-weer": "shx cp -r ../dist/umd/index.js ./dist/vendor/weer.js",
     "without-bundlers": "npm run prepare && npm run copy-weer && shx cp ./src/without-bundlers/index.js ./dist/.",
     "webpack": "npm run prepare && webpack --mode production ./src/esm-for-bundlers/index.js -o ./dist/index.js",
     "rollup": "npm run prepare && rollup -c",
-    "copy-vendor": "shx cp -r ../vendor ./dist/vendor",
-    "start": "npm run without-bundlers"
+    "start": "npm run pure-esm"
   },
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPL-3.0+",

@@ -14,11 +14,3 @@ chrome.runtime.getBackgroundPage(async (bgWindow) => {
 
   throw new TypeError('FROM POPUP!');
 });
-
-/*
-chrome.tabs.getCurrent(async () => {
-
-  throw new Error('Chrome API callback (not caught by handlers)');
-
-});
-*/
