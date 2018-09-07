@@ -74,7 +74,9 @@ chrome.tabs.getCurrent(() => setTimeout(() => {
 // Case 5
 chrome.tabs.getCurrent(async () => {
 
-  throw new Error('Async Chrome API callback (caught by handlers)');
+  throw new Error(
+    'Async Chrome API callback (caught by handlers in Chrome, not caught in FireFox even if timeouted)',
+  );
 
 });
 ```
@@ -134,7 +136,9 @@ chrome.tabs.getCurrent(Weer.Utils.timeouted(() => {
 // Case 5
 chrome.tabs.getCurrent(async () => {
 
-  throw new Error('Async Chrome API callback (caught by Weer)');
+  throw new Error(
+    'Async Chrome API callback (caught by Weer in Chrome, never caught in FireFox even if timeouted)',
+  );
 
 });
 ```
