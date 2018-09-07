@@ -1,3 +1,3 @@
-import Weer from './index.js';
+import * as Weer from './index.js';
 
 window.Weer = Weer;
