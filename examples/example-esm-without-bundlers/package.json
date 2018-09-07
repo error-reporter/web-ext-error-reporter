@@ -1,0 +1,27 @@
+{
+  "name": "example-esm-without-bundlers",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Weer usage examples",
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/error-reporter/weer"
+  },
+  "scripts": {
+    "clean": "shx rm -rf ./dist && mkdir ./dist",
+    "copy-src": "shx cp -r ./src/* ./dist/.",
+    "copy-vendor": "shx cp -r ../../vendor ./dist/.",
+    "copy-pages": "shx cp -r ../examples-commons/pages ./dist/.",
+    "copy-index": "shx cp ../examples-commons/index.js ./dist/.",
+    "copy-esm-weer": "shx cp -r ./node_modules/@weer/weer ./dist/vendor/weer",
+    "build": "npm run clean && npm run copy-src && npm run copy-vendor && npm run copy-pages && npm run copy-index && npm run copy-esm-weer",
+    "start": "npm run build"
+  },
+  "devDependencies": {
+    "shx": "^0.3.2"
+  },
+  "dependencies": {
+    "@weer/weer": "0.0.0"
+  }
+}

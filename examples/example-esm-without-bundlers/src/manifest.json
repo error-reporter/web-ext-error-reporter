@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
 
-  "name": "Weer Test",
+  "name": "Weer ESM Test",
   "description": "Blow up internet!",
   "version": "0.0.0.1",
   "author": "homerjsimpson@example.com",
@@ -13,14 +13,8 @@
   ],
 
   "background": {
-
     "persistent": false,
-    "scripts": [
-      "./vendor/optional-debug.js",
-      "./vendor/weer.js",
-      "./index.js"
-    ]
-
+    "page": "./background.html"
   },
 
   "browser_action": {

@@ -18,7 +18,7 @@
     "preinstall": "cd ./src && npm install",
     "postinstall": "npm run pack-debug",
     "pack-debug": "cd ./node_modules/debug && make browser && cd - && cp ./node_modules/debug/dist/debug.js ./vendor/optional-debug.js",
-    "build-lerna": "lerna exec --ignore @weer/weer -- rollup -c=../../rollup.config.js",
+    "build-lerna": "lerna exec --scope @weer/* --ignore @weer/weer -- rollup -c=../../rollup.config.js",
     "clean": "shx rm -rf ./packages/weer-weer",
     "build": "npm run clean && shx cp -r ./src/weer-weer ./packages/. && npm run build-lerna",
     "start": "npm run build",

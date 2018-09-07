@@ -1,0 +1,17 @@
+{
+  "name": "examples-commons",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Common files for other examples",
+  "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/error-reporter/weer"
+  },
+  "scripts": {
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}
