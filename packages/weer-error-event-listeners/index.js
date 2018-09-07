@@ -1,7 +1,7 @@
-import Debug from './private/debug';
+import Debug from '@weer/commons/debug';
+import { mandatory, assert, timeouted } from '@weer/utils';
+import { EXT_ERROR, PAC_ERROR } from '@weer/commons/error-types';
 import { areProxySettingsControlledAsync } from './private/proxy-settings';
-import { mandatory, assert, timeouted } from './utils';
-import { EXT_ERROR, PAC_ERROR } from './error-types';
 
 const debug = Debug('weer:catcher');
 

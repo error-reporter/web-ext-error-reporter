@@ -1,4 +1,4 @@
-import { mandatory, assert } from './utils';
+import { mandatory, assert } from '@weer/utils';
 
 const manifest = chrome.runtime.getManifest();
 

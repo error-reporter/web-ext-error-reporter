@@ -1,5 +1,5 @@
 import { toObject } from './private/errio';
-import { mandatory } from './utils';
+import { mandatory } from '@weer/utils';
 
 export const errorToPlainObject = (error = mandatory()) =>
   toObject(error, { stack: true, private: true });

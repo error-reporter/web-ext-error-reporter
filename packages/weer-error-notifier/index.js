@@ -1,5 +1,5 @@
-import { assert, mandatory, timeouted } from './utils';
-import * as ErrorTypes from './error-types';
+import { assert, mandatory, timeouted } from '@weer/utils';
+import * as ErrorTypes from '@weer/commons/error-types';
 
 const manifest = chrome.runtime.getManifest();
 

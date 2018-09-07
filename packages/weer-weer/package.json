@@ -1,9 +1,8 @@
 {
-  "name": "weer",
-  "version": "0.1.0",
+  "name": "@weer/weer",
+  "version": "0.0.1",
   "description": "Web Extensions Error Reporter catches global errors, shows notifications and opens error reporter in one click",
-  "main": "./cjs/",
-  "module": "./esm/",
+  "module": "./index.js",
   "author": "Ilya Ig. Petrov <ilyaigpetrov@gmail.com>, (https://git.io/ilyaigpetrov)",
   "license": "GPL-3.0+",
   "repository": {
@@ -14,6 +13,5 @@
     "web-extensions",
     "error",
     "report"
-  ],
-  "dependencies": {}
+  ]
 }
