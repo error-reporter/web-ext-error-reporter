@@ -24,7 +24,8 @@
   },
 
   "browser_action": {
-    "default_popup": "./pages/popup/index.html"
+    "default_popup": "./pages/popup/index.html",
+    "browser_style": false
   }
 
 }
