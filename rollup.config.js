@@ -1,14 +1,15 @@
 import Path from 'path';
 import shell from 'shelljs';
+import nodeResolve from 'rollup-plugin-node-resolve';
+import commonJs from 'rollup-plugin-commonjs';
+
+const plugins = [
+  nodeResolve(),
+  commonJs(),
+];
 
 const { LERNA_ROOT_PATH } = process.env;
 const PACKAGE_ROOT_PATH = process.cwd();
-
-/*
-console.log('PKG ROOT PATH', PACKAGE_ROOT_PATH);
-console.log('LERNA ROOT PATH', LERNA_ROOT_PATH);
-console.log('LERNA PKG NAME', LERNA_PACKAGE_NAME);
-*/
 
 // eslint-disable-next-line
 const PKG = require(Path.join(PACKAGE_ROOT_PATH, 'package.json'));
@@ -26,9 +27,14 @@ const pkgNameToFilename = (name) => {
       @weer/common/error-type -> error-type.js
       @weer/common/private/debug -> private/debug.js
     */
-    return `${name.replace(/^@weer\/(?:.+?\/)?(.+)$/, '$1')}.js`;
+    return `./${name.replace(/^@weer\/(?:.+?\/)?(.+)$/, '$1')}.js`;
   }
   return name;
+};
+
+const external = (name) => {
+
+  return name.startsWith('@weer');
 };
 
 const filename = pkgNameToFilename(PKG.name);
@@ -38,7 +44,7 @@ const output = (outputFilePath) => [
   {
     file: Path.join(allInOnePath, outputFilePath),
     format: 'esm',
-    paths: (pkgName) => `./${pkgNameToFilename(pkgName)}`,
+    paths: pkgNameToFilename,
     banner: `// Generated from package ${PKG.name} v${PKG.version}`,
   },
 ];
@@ -48,9 +54,13 @@ export default PKG.module
     {
       input: PKG.module,
       output: output(filename),
+      external,
+      plugins,
     },
   ]
   : shell.ls('*.js', '**/*.js').map((jsFilePath) => ({
     input: Path.join(PACKAGE_ROOT_PATH, jsFilePath),
     output: output(jsFilePath),
+    external,
+    plugins,
   }));

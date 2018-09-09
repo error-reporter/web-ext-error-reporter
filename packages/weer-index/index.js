@@ -5,7 +5,10 @@ import {
 } from '@weer/global-error-event-handlers';
 import { installErrorNotifier } from '@weer/error-notifier';
 import { openErrorReporter, makeReport } from '@weer/error-reporter';
-import { errorEventToPlainObject } from '@weer/error-event-to-plain-object';
+import {
+  errorEventToPlainObject,
+  getSourceMappedErrorEventAsync,
+} from '@weer/error-transformer';
 import { EXT_ERROR } from '@weer/commons/error-types';
 import * as Utils from '@weer/utils';
 
@@ -18,11 +21,21 @@ export {
   addGlobalHandler,
 };
 
-const toPlainObject = (errorType = mandatory(), errorEvent = mandatory()) =>
-  (errorType === EXT_ERROR
-    ? errorEventToPlainObject(errorEvent)
-    : errorEvent
-  );
+const toPlainObjectAsync = async (
+  errorType = mandatory(),
+  errorEvent = mandatory(),
+  ifUseSourceMaps = true,
+) => {
+
+  if (errorType !== EXT_ERROR) {
+    return errorEvent;
+  }
+  let plainErrorEvent = errorEventToPlainObject(errorEvent);
+  if (ifUseSourceMaps) {
+    plainErrorEvent = await getSourceMappedErrorEventAsync(plainErrorEvent);
+  }
+  return plainErrorEvent;
+};
 
 installGlobalHandlersOn({
   hostWindow: window,
@@ -33,6 +46,7 @@ export const installErrorReporter = ({
   toEmail = mandatory(),
   sendReportsInLanguages = ['en'],
   ifToNotifyAboutAsync = (/* errorType, errorEvent */) => true,
+  ifUseSourceMaps = true,
 } = {}) => {
 
   const {
@@ -52,14 +66,15 @@ export const installErrorReporter = ({
     notifyAboutError({
       errorType,
       errorEventLike: errorEvent,
-      clickHandler: () =>
+      clickHandler: async () =>
         openErrorReporter({
           toEmail,
           sendReportsInLanguages,
           errorTitle: errorEvent.message || errorEvent.error,
           report: makeReport({
             errorType,
-            serializablePayload: toPlainObject(errorType, errorEvent),
+            serializablePayload:
+              await toPlainObjectAsync(errorType, errorEvent, ifUseSourceMaps),
           }),
         }),
     });

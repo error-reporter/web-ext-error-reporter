@@ -19,7 +19,7 @@
   "license": "SEE LICENSE IN ./LICENSE.md",
   "dependencies": {
     "@weer/commons": "^0.0.0",
-    "@weer/error-event-to-plain-object": "^0.0.0",
+    "@weer/error-transformer": "^0.0.0",
     "@weer/error-notifier": "^0.0.0",
     "@weer/error-reporter": "^0.0.0",
     "@weer/global-error-event-handlers": "^0.0.0",

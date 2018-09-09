@@ -14,8 +14,7 @@
     "copy-vendor": "shx cp -r ../../vendor ./dist/.",
     "copy-pages": "shx mkdir ./dist/pages && shx cp -r ../examples-commons/pages/popup-esm ./dist/pages/popup",
     "minify-popup-script": "rollup -c",
-    "copy-esm-weer": "shx cp -r ./node_modules/@weer/weer ./dist/vendor/weer",
-    "build": "npm run clean && npm run copy-src && npm run copy-vendor && npm run copy-pages && npm run copy-esm-weer && npm run minify-popup-script",
+    "build": "npm run clean && npm run copy-src && npm run copy-vendor && npm run copy-pages && npm run minify-popup-script",
     "start": "npm run build"
   },
   "devDependencies": {

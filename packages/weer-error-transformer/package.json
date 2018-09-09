@@ -1,5 +1,5 @@
 {
-  "name": "@weer/error-event-to-plain-object",
+  "name": "@weer/error-transformer",
   "version": "0.0.0",
   "description": "",
   "module": "./index.js",
@@ -18,7 +18,10 @@
   ],
   "license": "SEE LICENSE IN ./LICENSE.md",
   "dependencies": {
-    "@weer/utils": "^0.0.0"
+    "@weer/utils": "^0.0.0",
+    "error-stack-parser": "^2.0.2",
+    "stackframe": "^1.0.4",
+    "stacktrace-gps": "^3.0.2"
   },
   "publishConfig": {
     "access": "public"
