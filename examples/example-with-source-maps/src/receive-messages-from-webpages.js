@@ -13,12 +13,6 @@ window.addEventListener('message', function(event) {
 
     if (event.data.action === 'SEND_REPORT') {
         console.log('Content script received SEND_DATA:', event.data);
-        chrome.runtime.sendMessage({ action: 'SEND_REPORT', report: 'abc3' }, {}, (...args) => console.log('YES', ...args));
-
-        /*
-        chrome.runtime.sendMessage({
-            hello: 1a
-        });
-        */
+        chrome.runtime.sendMessage(event.data, {}, (...args) => console.log('YES', ...args));
     }
 });
