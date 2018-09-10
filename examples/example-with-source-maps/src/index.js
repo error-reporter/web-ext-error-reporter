@@ -4,17 +4,12 @@ window.Weer.addGlobalHandler((errorType, errorEvent) => {
   window.lastErrorEvent = errorEvent;
 });
 
-window.Weer.installErrorSubmissionHandler(
-  async (...args) => {
-
-    console.log('RECEIVED SUBMISSION:', ...args);
-    // throw new Error('BOOM');
-  },
-);
-
 window.Weer.installErrorReporter({
-  toEmail: 'ilyaigpetrov+weer-test@gmail.com',
-  sendReportsInLanguages: ['ru'],
+  submissionOpts: {
+    handler: (...args) => console.log('REPORT HANDLER:', ...args),
+  },
+  // toEmail: 'ilyaigpetrov+weer-test@gmail.com',
+  // sendReportsInLanguages: ['ru'],
 });
 
 console.log('Extension started.');
