@@ -45,8 +45,21 @@ export const checkChromeError = () => {
 };
 
 // setTimeout fixes error context, see https://crbug.com/357568
-export const timeouted = (cb = mandatory()) =>
-  (...args) => { setTimeout(() => cb(...args), 0); };
+export const timeouted = (arg = mandatory()) => {
+
+  let cb;
+  let returnValue;
+  if (typeof arg === 'function') {
+    cb = arg;
+  } else {
+    ({ cb = mandatory(), returnValue } = arg);
+  }
+  return (...args) => {
+
+    setTimeout(() => cb(...args), 0);
+    return returnValue;
+  };
+};
 
 // Take error first callback and convert it to chrome API callback.
 export const chromified = (cb = mandatory()) =>

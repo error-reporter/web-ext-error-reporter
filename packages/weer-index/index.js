@@ -12,7 +12,7 @@ import {
 import { EXT_ERROR } from '@weer/commons/error-types';
 import * as Utils from '@weer/utils';
 
-const { mandatory } = Utils;
+const { mandatory, timeouted } = Utils;
 
 export {
   Utils,
@@ -41,6 +41,39 @@ installGlobalHandlersOn({
   hostWindow: window,
   nameForDebug: 'BG',
 });
+
+export const installErrorSubmissionHandler = (handler) =>
+  chrome.runtime.onMessage.addListener(
+    timeouted({
+      /*
+Returned value matters, see
+https://developer.chrome.com/extensions/runtime#event-onMessage
+
+> This function becomes invalid when the event listener returns,
+> unless you return true from the event listener to indicate
+> you wish to send a response asynchronously
+      */
+      returnValue: true,
+      // Don't make cb async, because FireFox doesn't catch promise rejections.
+      cb: (request, sender, sendResponse) => {
+
+        if (request.action !== 'SEND_REPORT') {
+          return;
+        }
+        try {
+          const res = handler(request);
+          Promise.resolve(res).then(
+            (result) => sendResponse({ ok: true, result }),
+            (error) => { throw error; },
+          );
+        } catch (error) {
+          sendResponse({ error });
+          // Global handlers must handle it, don't suppress this error.
+          throw error;
+        }
+      },
+    }),
+  );
 
 export const installErrorReporter = ({
   toEmail = mandatory(),

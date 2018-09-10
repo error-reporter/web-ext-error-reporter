@@ -10,7 +10,7 @@ export default [
     input: popupIndex,
     output: {
       file: popupIndex,
-      format: 'umd',
+      format: 'esm',
       sourcemap: true,
     },
   },
@@ -19,7 +19,7 @@ export default [
     input: './node_modules/@weer/weer/expose-to-window.js',
     output: {
       file: './dist/vendor/weer/expose-to-window.js',
-      format: 'umd',
+      format: 'esm',
       sourcemap: true,
     },
   },

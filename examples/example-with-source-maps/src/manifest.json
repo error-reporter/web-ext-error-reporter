@@ -12,6 +12,14 @@
     "notifications"
   ],
 
+  "content_scripts": [{
+      "matches": [
+        "https://error-reporter.github.io/*"
+      ],
+      "run_at": "document_start",
+      "js": ["./receive-messages-from-webpages.js"]
+  }],
+
   "background": {
     "persistent": false,
     "page": "./background.html"
