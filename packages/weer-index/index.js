@@ -11,7 +11,6 @@ import {
 } from '@weer/error-reporter';
 import {
   errorEventToPlainObject,
-  getSourceMappedErrorEventAsync,
 } from '@weer/error-transformer';
 import { EXT_ERROR } from '@weer/commons/error-types';
 import * as Utils from '@weer/utils';
@@ -28,17 +27,12 @@ export {
 const toPlainObjectAsync = async (
   errorType = mandatory(),
   errorEvent = mandatory(),
-  ifUseSourceMaps = true,
 ) => {
 
   if (errorType !== EXT_ERROR) {
     return errorEvent;
   }
-  let plainErrorEvent = errorEventToPlainObject(errorEvent);
-  if (ifUseSourceMaps) {
-    plainErrorEvent = await getSourceMappedErrorEventAsync(plainErrorEvent);
-  }
-  return plainErrorEvent;
+  return errorEventToPlainObject(errorEvent);
 };
 
 installGlobalHandlersOn({
@@ -53,7 +47,6 @@ export const installErrorReporter = ({
     sendReportsInLanguages = ['en'],
   } = {},
   ifToNotifyAboutAsync = (/* errorType, errorEvent */) => true,
-  ifUseSourceMaps = true,
 } = {}) => {
 
   assert(
@@ -90,7 +83,7 @@ export const installErrorReporter = ({
           report: makeReport({
             errorType,
             serializablePayload:
-              await toPlainObjectAsync(errorType, errorEvent, ifUseSourceMaps),
+              await toPlainObjectAsync(errorType, errorEvent),
           }),
         }),
     });

@@ -23,6 +23,7 @@
     "shx": "^0.3.2"
   },
   "dependencies": {
-    "@weer/weer": "0.0.0"
+    "@weer/weer": "0.0.0",
+    "stacktrace-js": "^2.0.0"
   }
 }

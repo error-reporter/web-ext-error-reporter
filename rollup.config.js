@@ -4,8 +4,8 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import commonJs from 'rollup-plugin-commonjs';
 
 const plugins = [
-  nodeResolve(),
-  commonJs(),
+  // nodeResolve(),
+  // commonJs(),
 ];
 
 const { LERNA_ROOT_PATH } = process.env;

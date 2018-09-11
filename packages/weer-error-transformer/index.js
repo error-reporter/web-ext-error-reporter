@@ -1,9 +1,10 @@
 import { mandatory } from '@weer/utils';
-import errorStackParser from 'error-stack-parser';
-import StackTraceGps from 'stacktrace-gps';
-import StackFrame from 'stackframe';
+// import errorStackParser from 'error-stack-parser';
+// import StackTraceGps from 'stacktrace-gps';
+// import StackFrame from 'stackframe';
 import { toObject } from './private/errio';
 
+/*
 const privateGetSourceMappedErrorStackAsync = (
   error = mandatory(),
   gps = mandatory(),
@@ -42,6 +43,7 @@ export const getSourceMappedErrorEventAsync = async (
 
 export const getSourceMappedErrorStackAsync = (error = mandatory()) =>
   privateGetSourceMappedErrorStackAsync(error, new StackTraceGps());
+*/
 
 export const errorToPlainObject = (error = mandatory()) =>
   toObject(error, { stack: true, private: true });
