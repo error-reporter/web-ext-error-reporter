@@ -1,4 +1,5 @@
 // import * as Weer from './vendor/weer/index.js'
+import { mapErrorAsync } from './lib/map-stack-frames.js';
 
 console.log('CONTENT SCRIPT STARTED', chrome.runtime);
 // const port = chrome.runtime.connect();

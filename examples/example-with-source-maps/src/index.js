@@ -1,5 +1,3 @@
-import StackTrace from 'stacktrace-js';
-
 window.Weer.addGlobalHandler((errorType, errorEvent) => {
 
   console.log('Global handler caught:', errorType, errorEvent);
@@ -11,8 +9,6 @@ window.Weer.installErrorReporter({
     handler: async ({ report }) => {
 
       console.log('REPORT HANDLER RECEIVED:', report);
-      const mappedError = await StackTrace.fromError(report.payload.error);
-      console.log(mappedError);
     },
   },
   // toEmail: 'ilyaigpetrov+weer-test@gmail.com',

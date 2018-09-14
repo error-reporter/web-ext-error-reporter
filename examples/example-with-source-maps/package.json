@@ -10,7 +10,7 @@
   },
   "scripts": {
     "clean": "shx rm -rf ./dist && mkdir ./dist",
-    "copy-src": "shx cp -r ./src/* ./dist/.",
+    "copy-src": "shx cp -r ./src/* ./dist/. && shx cp node_modules/source-map/lib/mappings.wasm ./dist/.",
     "copy-vendor": "shx cp -r ../../vendor ./dist/.",
     "copy-pages": "shx mkdir ./dist/pages && shx cp -r ../examples-commons/pages/popup-esm ./dist/pages/popup",
     "minify-popup-script": "rollup -c",
@@ -19,11 +19,13 @@
   },
   "devDependencies": {
     "rollup": "^0.65.2",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-terser": "^2.0.2",
     "shx": "^0.3.2"
   },
   "dependencies": {
     "@weer/weer": "0.0.0",
-    "stacktrace-js": "^2.0.0"
+    "error-stack-parser": "^2.0.2",
+    "source-map": "^0.7.3"
   }
 }

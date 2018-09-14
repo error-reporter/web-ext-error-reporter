@@ -1,11 +1,13 @@
 import { terser } from 'rollup-plugin-terser';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonJs from 'rollup-plugin-commonjs';
+import builtins from 'rollup-plugin-node-builtins';
 
 const plugins = [
   nodeResolve(),
   commonJs(),
-  terser(),
+  // terser(),
+  builtins(),
 ];
 
 const popupIndex = './dist/pages/popup/index.js';
